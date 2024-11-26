@@ -10,6 +10,12 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/hi', (req, res) => {
+  res.json({
+    message: 'API - 👋',
+  });
+});
+
 router.use('/emojis', emojis);
 
 module.exports = router;
