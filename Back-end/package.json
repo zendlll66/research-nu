@@ -8,7 +8,7 @@
     "dev": "nodemon src/index.js",
     "lint": "eslint --fix src",
     "test": "jest",
-    "build": "tsc",
+    "build": "vercel build --output public",
     "vercel-build":"echo hello"
   },
   "keywords": [],
