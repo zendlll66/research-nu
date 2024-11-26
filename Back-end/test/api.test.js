@@ -14,7 +14,7 @@ describe('GET /api/v1', () => {
   });
 });
 
-describe('GET /gg', () => {
+describe('GET /api/gg', () => {
   it('responds with a json message', (done) => {
     request(app)
       .get('/api/v1')
