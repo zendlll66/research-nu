@@ -17,7 +17,7 @@ describe('GET /api/v1', () => {
 describe('GET /api/gg', () => {
   it('responds with a json message', (done) => {
     request(app)
-      .get('/api/v1')
+      .get('/api/gg')
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(200, {
