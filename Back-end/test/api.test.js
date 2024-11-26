@@ -14,6 +14,18 @@ describe('GET /api/v1', () => {
   });
 });
 
+describe('GET /gg', () => {
+  it('responds with a json message', (done) => {
+    request(app)
+      .get('/api/v1')
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(200, {
+        message: 'hello GG'
+      }, done);
+  });
+});
+
 describe('GET /api/v1/emojis', () => {
   it('responds with a json message', (done) => {
     request(app)
