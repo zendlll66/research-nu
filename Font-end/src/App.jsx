@@ -1,15 +1,39 @@
 import React from 'react'
-import Homepage from './page/Homepage'
-import Sidenav from './components/Sidenav'
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Ebookpage from './page/Ebookpage'
+import Homepage from './page/Homepage';
+import Dashboard from './page/Dashboard';
+import Research from './page/Research';
+import Foradmin from './page/Foradmin';
+import Layout from './components/Layout';
 
+
+
+
+const router = createBrowserRouter([
+  {
+      path: '/',
+      element: <Layout/>, // ใช้ Layout เป็น component หลัก
+      children: [
+          { path: '/', element: <Homepage/> },
+          { path: 'dashboard', element: <Dashboard/> },
+          { path: 'ebook', element: <Ebookpage /> },
+          { path: 'research', element: <Research/>},
+          { path: 'foradmin', element: <Foradmin/> },
+      ],
+  },
+]);
 
 const App = () => {
   return (
-    <div>
-      <Sidenav/>
-      
-    </div>
+    
+    <RouterProvider router={router} />
   )
 }
 
 export default App
+
+
+
+
+
