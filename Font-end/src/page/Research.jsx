@@ -26,7 +26,7 @@ const Research = () => {
 
   return (
     <div>
-      <h1>Research</h1>
+      <h1>Research hi</h1>
       <ul>
         {researchData.map((item, index) => (
           <li key={index}>
