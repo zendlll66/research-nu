@@ -66,6 +66,15 @@ app.get('/api/attractions', (req, res,next) => {
   )
 });
 
+app.get('/api/attractions2', (req, res,next) => {
+  connection.query(
+    'SELECT * FROM attractions',
+    function(err,results,fields){
+      res.json(results)
+    }
+  )
+});
+
 
 
 app.use('/api/v1', api);
