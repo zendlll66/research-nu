@@ -11,6 +11,67 @@ import {
     FiUsers,
 } from "react-icons/fi";
 import { motion } from "framer-motion";
+import { PolarArea, Line } from 'react-chartjs-2';
+import { Chart as ChartJS, RadialLinearScale, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement } from 'chart.js';
+
+// Register components of Chart.js
+ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement);
+
+const polarData = {
+    labels: ['Red', 'Green', 'Yellow', 'Grey', 'Blue'],
+    datasets: [
+        {
+            label: 'Polar Dataset',
+            data: [11, 16, 7, 3, 14],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 205, 86, 0.2)',
+                'rgba(201, 203, 207, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(255, 205, 86, 1)',
+                'rgba(201, 203, 207, 1)',
+                'rgba(54, 162, 235, 1)',
+            ],
+            borderWidth: 1,
+        },
+    ],
+};
+
+const lineData = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+    datasets: [
+        {
+            label: 'Line Dataset',
+            data: [65, 59, 80, 81, 56, 55],
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1,
+        },
+    ],
+};
+
+const PolarChart = () => {
+    return (
+        <div>
+            <PolarArea data={polarData} />
+
+        </div>
+    );
+};
+
+const LineChart = () => {
+    return (
+        <div>
+            <Line data={lineData} />
+        </div>
+    );
+};
+
 
 const Sidenav = () => {
     return (
@@ -53,20 +114,6 @@ const Sidebar = () => {
                     open={open}
                 />
                 <Option
-                    Icon={FiShoppingCart}
-                    title="Products"
-                    selected={selected}
-                    setSelected={setSelected}
-                    open={open}
-                />
-                <Option
-                    Icon={FiTag}
-                    title="Tags"
-                    selected={selected}
-                    setSelected={setSelected}
-                    open={open}
-                />
-                <Option
                     Icon={FiBarChart}
                     title="Analytics"
                     selected={selected}
@@ -93,8 +140,8 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs }) => {
             layout
             onClick={() => setSelected(title)}
             className={`relative flex h-10 w-full items-center rounded-md transition-colors ${selected === title
-                    ? "bg-indigo-100 text-indigo-800"
-                    : "text-slate-500 hover:bg-slate-100"
+                ? "bg-indigo-100 text-indigo-800"
+                : "text-slate-500 hover:bg-slate-100"
                 }`}
         >
             <motion.div
@@ -212,4 +259,14 @@ const ToggleClose = ({ open, setOpen }) => {
     );
 };
 
-const ExampleContent = () => <div className="h-[300vh] w-full"> hi</div>;
+const ExampleContent = () =>
+    <div className="h-[300vh] w-full">
+        <div className='flex'>
+            <div className='m-10 w-[600px] h-[600px] rounded-[24px] shadow-lg '>
+                <PolarChart />
+            </div>
+            <div className='m-10 w-[600px] h-[600px] rounded-[24px] shadow-lg '>
+                <LineChart />
+            </div>
+        </div>
+    </div>;
