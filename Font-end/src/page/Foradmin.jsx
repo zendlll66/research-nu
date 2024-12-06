@@ -32,9 +32,9 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        if (data.status === "ok") {
-          alert("Login Successful!");
-          navigate("/dashboard"); // ย้ายไปหน้า /dashboard
+        if (response.ok && data.status === "ok") {
+          localStorage.setItem("token", data.token); // เก็บ Token หลังล็อกอิน
+          navigate("/dashboard"); // ไปหน้า Dashboard
         } else {
           alert(`Login failed: ${data.message}`);
         }
@@ -46,6 +46,8 @@ const Login = () => {
       alert("An error occurred. Please try again.");
     }
   };
+
+  
 
 
 

@@ -1,12 +1,22 @@
-import React from 'react'
-import Sidenav from '../components/Sidenav'
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import Sidenav from "../components/Sidenav";
 
 const Dashboard = () => {
-  return (
-    <div className='pt-[-20%]'>
-      <Sidenav />
-    </div>
-  )
-}
+  const navigate = useNavigate(); // ใช้สำหรับเปลี่ยนเส้นทาง
 
-export default Dashboard
+  // ฟังก์ชัน Logout
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // ลบ Token
+    navigate("/"); // เปลี่ยนเส้นทางไปหน้า Login
+  };
+
+  return (
+    <div className="pt-[-20%]">
+      <Sidenav />
+      <button onClick={handleLogout} className="fixed top-0 right-0 m-2">Logout</button>
+    </div>
+  );
+};
+
+export default Dashboard;

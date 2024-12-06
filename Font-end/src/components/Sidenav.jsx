@@ -129,6 +129,8 @@ const Sidebar = () => {
                 />
             </div>
 
+            
+
             <ToggleClose open={open} setOpen={setOpen} />
         </motion.nav>
     );
