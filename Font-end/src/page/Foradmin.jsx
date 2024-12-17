@@ -23,7 +23,7 @@ const Login = () => {
     };
 
     try {
-      const response = await fetch(`${backendUrl}login`, {
+      const response = await fetch(`${backendUrl}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(jsonData),
