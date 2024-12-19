@@ -25,3 +25,4 @@ const Ebookpage = () => {
 };
 
 export default Ebookpage
+

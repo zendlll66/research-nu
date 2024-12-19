@@ -286,7 +286,10 @@ const MainContent = ({ selected }) => {
       {selected === "Edit" &&
         (<div className="space-y-4">
           {selectedMember ? (
-            <Editpage member={selectedMember} setSelectedMember={setSelectedMember} />
+            <Editpage
+              member={selectedMember}
+              setSelectedMember={setSelectedMember}
+            />
           ) : (
             facultyData.map((faculty) => (
               <div
@@ -295,7 +298,7 @@ const MainContent = ({ selected }) => {
               >
                 {/* Faculty Header */}
                 <div
-                  className="relative flex items-center justify-between p-4"
+                  className="relative flex items-center justify-between p-4 cursor-pointer"
                   onClick={() => handleFacultyClick(faculty.name)}
                 >
                   <div className="flex flex-col">
@@ -309,30 +312,32 @@ const MainContent = ({ selected }) => {
                   </span>
                 </div>
 
-
-
                 {/* Faculty Members */}
-                {expandedFaculty === faculty.name && (
-                  <div className="bg-gray-50 p-4 space-y-2">
-
-                    <div className=" flex justify-end">
-                      <button className="bg-green-300 w-10 h-full rounded-md"
-                        onClick={handleAddMember}>
-                        +
-                      </button>
-                    </div>
-
-                    {faculty.members.map((member) => (
-                      <div
-                        key={member}
-                        className="cursor-pointer bg-white border rounded-lg p-2 hover:bg-gray-100"
-                        onClick={() => handleMemberClick(member)} // แสดงหน้า Postpage เมื่อกด
-                      >
-                        {member}
-                      </div>
-                    ))}
+                <div
+                  className={`bg-gray-50 px-4  pb-4 space-y-2 overflow-hidden transition-all duration-200 ease-in-out ${expandedFaculty === faculty.name
+                      ? "max-h-[1000px] opacity-100"
+                      : "max-h-0 opacity-0 pb-0"
+                    }`}
+                >
+                  <div className="flex justify-end">
+                    <button
+                      className="bg-green-300 w-10 h-full rounded-md"
+                      onClick={handleAddMember}
+                    >
+                      +
+                    </button>
                   </div>
-                )}
+
+                  {faculty.members.map((member) => (
+                    <div
+                      key={member}
+                      className="cursor-pointer bg-white border rounded-lg p-2 hover:bg-gray-100"
+                      onClick={() => handleMemberClick(member)} // แสดงหน้า Postpage เมื่อกด
+                    >
+                      {member}
+                    </div>
+                  ))}
+                </div>
               </div>
             ))
           )}

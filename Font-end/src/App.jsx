@@ -7,6 +7,8 @@ import Research from "./page/Research";
 import Foradmin from "./page/Foradmin";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute"; // นำเข้า ProtectedRoute
+import Nopage from "./components/Nopage";
+import ResearcherDetails from "./components/ResearcherDetails";
 
 const router = createBrowserRouter([
   {
@@ -24,14 +26,13 @@ const router = createBrowserRouter([
       },
       { path: "ebook", element: <Ebookpage /> },
       { path: "research", element: <Research /> },
+      { path: "/researcher/:faculty/:id", element: <ResearcherDetails/> },
+      
       {
         path: "foradmin",
-        element: (
-
-          <Foradmin />
-
-        ),
+        element: <Foradmin />,
       },
+      { path: "*", element: <Nopage/>}, // เส้นทาง fallback สำหรับเส้นทางที่ไม่พบ
     ],
   },
 ]);
