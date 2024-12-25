@@ -1,16 +1,10 @@
 import React from 'react'
+import StepProgress from '../StepProgress'
 
 const Postpage = () => {
   return (
     <div>
-      <div className='flex flex-col'>
-        <span>Title</span>
-        <input type="text" className='outline-none' />
-        <span>Title</span>
-        <input type="text" className='outline-none' />
-        <span>Title</span>
-        <input type="text" className='outline-none' />
-      </div>
+      <StepProgress/>
     </div>
   )
 }

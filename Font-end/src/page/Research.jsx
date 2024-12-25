@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 const Research = () => {
   const [selectedFaculty, setSelectedFaculty] = useState(""); // ภาควิชาที่เลือก
@@ -55,7 +56,7 @@ const Research = () => {
     <div>
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
+        className="fixed inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
       >
         <div
           style={{
@@ -68,7 +69,7 @@ const Research = () => {
 
       <div
         aria-hidden="true"
-        className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
+        className="fixed inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
       >
         <div
           style={{
@@ -101,7 +102,16 @@ const Research = () => {
         </div>
 
         {/* สถานะ Loading หรือ Error */}
-        {loading && <div>Loading...</div>}
+        {loading && (
+          <div className="fixed inset-0 bg-white bg-opacity-10 backdrop-blur-sm flex justify-center items-center z-50">
+            <DotLottieReact
+              className="w-[200px] h-[200px]"
+              src="https://lottie.host/5b8d0182-13bd-40c0-b485-e4621b87aba7/LSlDgjJbnv.lottie"
+              loop
+              autoplay
+            />
+          </div>
+        )}
         {error && <div className="text-red-500">Error: {error}</div>}
 
         {/* แสดงข้อมูลนักวิจัย */}
