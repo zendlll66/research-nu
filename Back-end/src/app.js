@@ -78,7 +78,6 @@ app.get('/api/attractions2', (req, res,next) => {
 
 
 app.use('/api/v1', api);
-
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
 
