@@ -54,8 +54,8 @@ const ActivityDetail = () => {
 
     return (
         <>
-            <div className="p-6 mt-20 flex flex-col justify-center items-center">
-                <div className="rounded-lg bg-slate-400 w-full h-[500px] ">
+            <div className="px-40 mt-20 flex flex-col justify-center items-center">
+                <div className="rounded-lg bg-slate-400 w-full ">
                     <img
                         src={`${baseImageUrl}${activity.imageUrl}`}
                         alt={activity.topic}
@@ -65,8 +65,11 @@ const ActivityDetail = () => {
                 <h1 className="text-2xl font-bold mt-4">{activity.topic}</h1>
                 <p className="mt-2">{activity.detail}</p>
                 <p className="border-b-2 border-slate-600 h-5 w-full mt-4"></p>
-                <p className="mt-4">
-                    <span className="font-bold">Date:</span> {activity.time}
+                <p className="mt-4 flex flex-col">
+                    <span className="font-bold">Date: {activity.time}</span> 
+                    <span className="text-sm ml-2">
+                        <span>POST BY: </span>{activity.admin}
+                    </span>
                 </p>
             </div>
             <div className="px-6 mt-4">

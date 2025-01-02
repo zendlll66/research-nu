@@ -75,8 +75,8 @@ const LineChart = () => <Line data={lineData} />;
 
 // Main Sidenav Component
 const Sidenav = () => {
-  const [selected, setSelected] = useState("Post"); // State สำหรับการเลือกเมนู
-
+  const [selected, setSelected] = useState("Post News"); // State สำหรับการเลือกเมนู
+  
   return (
     <div className="flex bg-indigo-50">
       <Sidebar selected={selected} setSelected={setSelected} />

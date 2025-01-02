@@ -69,14 +69,14 @@ const Layout = () => {
               {isLoggedIn ? (
                 <button
                   onClick={handleLogout}
-                  className="text-sm/6 font-semibold text-gray-900"
+                  className="text-sm/6 font-semibold text-red-400"
                 >
                   Logout
                 </button>
               ) : (
                 <a
                   href="/foradmin"
-                  className="text-sm/6 font-semibold text-gray-900"
+                  className="text-sm/6 font-semibold text-green-400"
                 >
                   Log in <span aria-hidden="true">&rarr;</span>
                 </a>

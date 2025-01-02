@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 const Research = () => {
-  const [selectedFaculty, setSelectedFaculty] = useState(""); // ภาควิชาที่เลือก
-  const [researchers, setResearchers] = useState([]); // ข้อมูลนักวิจัย
-  const [loading, setLoading] = useState(false); // สถานะ Loading
-  const [error, setError] = useState(null); // ข้อผิดพลาดถ้ามี
+  const [selectedFaculty, setSelectedFaculty] = useState("");
+  const [researchers, setResearchers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [viewMode, setViewMode] = useState(
+    localStorage.getItem("viewMode") || "withImage"
+  );
+  const baseImageUrl = "https://project-six-rouge.vercel.app";
 
   const faculties = [
     "Industrial Engineering",
@@ -16,14 +21,12 @@ const Research = () => {
   ];
 
   useEffect(() => {
-    // if (!selectedFaculty) return; // หากไม่มีการเลือกภาควิชา ไม่ต้อง fetch
-
     const fetchResearchers = async () => {
       setLoading(true);
       setError(null);
 
       try {
-        const encodedFaculty = encodeURIComponent(selectedFaculty); // เข้ารหัสชื่อภาควิชา
+        const encodedFaculty = encodeURIComponent(selectedFaculty);
         const response = await fetch(
           `https://project-six-rouge.vercel.app/researcher/${encodedFaculty}`
         );
@@ -32,25 +35,37 @@ const Research = () => {
         }
         const json = await response.json();
         if (json.status === "ok" && Array.isArray(json.data)) {
-          setResearchers(json.data); // เก็บข้อมูลนักวิจัย
+          setResearchers(json.data);
         } else {
           throw new Error("Unexpected data format");
         }
       } catch (err) {
-        setError(err.message); // เก็บข้อความข้อผิดพลาด
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
     fetchResearchers();
-  }, [selectedFaculty]); // Fetch ข้อมูลใหม่เมื่อ selectedFaculty เปลี่ยน
+  }, [selectedFaculty]);
 
   const navigate = useNavigate();
 
-  const handleClick = (faculty, id) => {
-    navigate(`/researcher/${encodeURIComponent(faculty)}/${id}`);
+  const handleClick = (faculty, id, researcher) => {
+    navigate(`/researcher/${encodeURIComponent(faculty)}/${id}`, {
+      state: { researcher },
+    });
   };
+
+  const handleViewChange = (e) => {
+    const selectedView = e.target.value;
+    setViewMode(selectedView);
+    localStorage.setItem("viewMode", selectedView);
+  };
+
+  const filteredResearchers = researchers.filter((researcher) =>
+    researcher.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
@@ -61,47 +76,59 @@ const Research = () => {
         <div
           style={{
             clipPath:
-              'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+              "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
           }}
           className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
         />
       </div>
 
-      <div
-        aria-hidden="true"
-        className="fixed inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
-      >
-        <div
-          style={{
-            clipPath:
-              'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-          }}
-          className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
-        />
-      </div>
-
       <div className="mt-20 p-6">
-        <h1 className="text-2xl font-bold mb-4">Researcher Data</h1>
-
-        {/* เลือกภาควิชา */}
-        <div className="mb-4">
-          <select
-            className="border rounded-lg p-2"
-            value={selectedFaculty}
-            onChange={(e) => setSelectedFaculty(e.target.value)} // เปลี่ยนภาควิชาที่เลือก
-          >
-            <option value="" disabled>
-              Select Faculty
-            </option>
-            {faculties.map((faculty) => (
-              <option key={faculty} value={faculty}>
-                {faculty}
-              </option>
-            ))}
-          </select>
+        <div className="justify-center items-center flex flex-col p-4 rounded-lg shadow bg-black bg-opacity-10">
+          <h1 className="text-2xl font-bold mb-4">Researcher Data</h1>
+          {/* ช่องค้นหา */}
+          <div className="mb-4 w-full justify-center items-center flex p-2 rounded-lg">
+            <input
+              type="text"
+              className="border rounded-lg p-2 w-full mx-20"
+              placeholder="Search researchers..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
         </div>
 
-        {/* สถานะ Loading หรือ Error */}
+        <div className=" mt-4">
+          {/* เลือกภาควิชา */}
+          <div className="mb-4 flex flex-col sm:flex-row  justify-between">
+            <select
+              className="border rounded-lg p-3 w-fit h-fit"
+              value={selectedFaculty}
+              onChange={(e) => setSelectedFaculty(e.target.value)}
+            >
+              <option value="" disabled>
+                Select Faculty
+              </option>
+              {faculties.map((faculty) => (
+                <option key={faculty} value={faculty}>
+                  {faculty}
+                </option>
+              ))}
+            </select>
+
+            {/* View Mode Dropdown */}
+            <div className="mb-4 flex   ">
+              <select
+                className="border rounded-lg p-2"
+                value={viewMode}
+                onChange={handleViewChange}
+              >
+                <option value="withImage">View with Image</option>
+                <option value="withoutImage">View without Image</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
         {loading && (
           <div className="fixed inset-0 bg-white bg-opacity-10 backdrop-blur-sm flex justify-center items-center z-50">
             <DotLottieReact
@@ -114,23 +141,33 @@ const Research = () => {
         )}
         {error && <div className="text-red-500">Error: {error}</div>}
 
-        {/* แสดงข้อมูลนักวิจัย */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {researchers.map((researcher) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {filteredResearchers.map((researcher) => (
             <div
               key={researcher.id}
               className="bg-white border rounded-lg p-4 shadow hover:shadow-lg"
-              onClick={() => handleClick(researcher.department, researcher.id)}
+              onClick={() =>
+                handleClick(researcher.faculty, researcher.id, researcher)
+              }
             >
+              {viewMode === "withImage" && (
+                <div className="rounded-t-lg mb-3 grid place-items-center">
+                  <img
+                    className="rounded-md h-40 object-cover"
+                    src={`${baseImageUrl}${researcher.imageUrl}`}
+                    alt={researcher.name}
+                  />
+                </div>
+              )}
+
               <h2 className="text-lg font-semibold">{researcher.name}</h2>
-              <p className="text-gray-600">{researcher.faculty}</p>
+              {/* <p className="text-gray-600">{researcher.faculty}</p> */}
               <p className="text-gray-500">{researcher.department || "N/A"}</p>
             </div>
           ))}
         </div>
       </div>
     </div>
-
   );
 };
 
