@@ -24,6 +24,7 @@ import Editpage from "./Dashboard/Editpage";
 import EditEbook from "./Dashboard/EditEbook";
 
 import { MdOutlineBookmarkAdd } from "react-icons/md";
+import Analytics from "./Dashboard/Analytics";
 
 
 
@@ -345,15 +346,7 @@ const MainContent = ({ selected }) => {
         )
       }
       {selected === "Analytics" && (
-        <div className=" border-2 ">
-          <div className="h-[400px] ">
-            <PolarChart />
-          </div>
-          <div className="h-[300px]">
-            <LineChart />
-          </div>
-
-        </div>
+       <Analytics/>
 
 
       )}

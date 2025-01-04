@@ -6,6 +6,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { FiCreditCard, FiMail, FiUser, FiUsers } from "react-icons/fi";
 import Carousels from '../components/Carousels';
 import Footercompo from '../components/Footercompo';
+import Statistics from '../components/Statistics';
 
 const navigation = [
   { name: 'HOME', href: '/' },
@@ -31,7 +32,7 @@ export default function Example() {
     },]
   return (
 
-    <div className="bg-white min-h-screen  flex flex-col overflow-x-auto">
+    <div className="bg-white min-h-screen  flex flex-col overflow-x-auto ">
       <div className="flex-grow ">
         <div className="relative isolate px-6 pt-14 lg:px-8 ">
           <div
@@ -78,9 +79,9 @@ export default function Example() {
               </div>
             </div>
           </div>
-          {/* <div
+          <div
             aria-hidden="true"
-            className="fixed inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
+            className="fixed inset-x-0 top-[calc(100%-13rem)] z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
           >
             <div
               style={{
@@ -89,15 +90,17 @@ export default function Example() {
               }}
               className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
             />
-          </div> */}
+          </div>
+        </div>
+        <div className='mb-10'>
+          <Statistics />
         </div>
 
-        <div className=''>
-          <Footercompo />
-        </div>
       </div>
 
-
+      <div className='z-20'>
+        <Footercompo />
+      </div>
     </div>
   )
 }

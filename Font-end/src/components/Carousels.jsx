@@ -72,7 +72,7 @@ const Carousels = () => {
       </div>
 
       {/* Carousel */}
-      <div className="relative w-full mt-4">
+      <div className="relative w-full mt-4 ">
         <div
           className="flex transition-transform duration-300"
           style={{
@@ -95,7 +95,7 @@ const Carousels = () => {
                 <div
                   key={item.id}
                   onClick={() => handleViewDetail(item)}
-                  className="w-[250px] h-auto mx-2 space-y-5 rounded-md flex-shrink-0 
+                  className="w-[250px]  h-[290px]  overflow-hidden mx-2 space-y-5 rounded-md flex-shrink-0 
                   transition-all duration-300 hover:translate-y-[-15px] cursor-pointer"
                 >
                   <div className="rounded-lg overflow-hidden bg-slate-400 w-full h-[150px]">
@@ -107,12 +107,12 @@ const Carousels = () => {
                       />
                     )}
                   </div>
-                  <div className="w-full">
+                  <div className="w-full px-2 space-y-2 ">
                     <span className="text-[12px] bg-white text-opacity-15 border border-gray-400 w-fit p-[2px] rounded-md">
                       {item.topic}
                     </span>
                     <h1 className="font-bold">{item.topic}</h1>
-                    <p className="text-[12px]">{item.detail}</p>
+                    <p className="text-[12px] ">{item.detail}</p>
                   </div>
                 </div>
               ))}
