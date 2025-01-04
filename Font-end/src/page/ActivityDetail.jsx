@@ -45,12 +45,17 @@ const ActivityDetail = () => {
 
     return (
         <div className="px-40 mt-20 flex flex-col justify-center items-center">
-            <div className="rounded-lg bg-slate-400 w-full">
-                <img
-                    src={`${baseUrl}${activity.imageUrl}`}
-                    alt={activity.topic}
-                    className="w-full h-full object-cover"
-                />
+            {/* แสดงรูปภาพ */}
+            <div className=" gap-4 mt-6 flex flex-col">
+                {activity.imageUrl.map((img, index) => (
+                    <div key={index} className="rounded-lg  overflow-hidden bg-slate-400 ">
+                        <img
+                            src={`https://project-six-rouge.vercel.app${img}`}
+                            alt={`news-image-${index}`}
+                            className="w-full h-full "
+                        />
+                    </div>
+                ))}
             </div>
 
             <h1 className="text-2xl font-bold mt-4">{activity.topic}</h1>
@@ -64,25 +69,23 @@ const ActivityDetail = () => {
                     POST BY: {activity.admin}
                 </span>
 
-                {/* แสดงไฟล์ที่แนบมา */}
-                <div className="mt-4">
-                    <h2 className="text-lg font-semibold">Attached Files:</h2>
-                    {files.length > 0 ? (
-                        files.map((file, index) => (
-                            <a
-                                key={index}
-                                href={`${baseUrl}${activity.filesUrl}`}
-                                download
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-500 underline mt-2 block"
-                            >
-                                {file}
-                            </a>
-                        ))
-                    ) : (
-                        <p className="text-gray-500">No files attached.</p>
-                    )}
+                {/* แสดงไฟล์ */}
+                <div className="mt-6">
+                    <h2 className="text-xl font-semibold">Attached Files</h2>
+                    <ul className="mt-4 list-disc list-inside space-y-2 mb-20">
+                        {activity.filesUrl.map((file, index) => (
+                            <li key={index}>
+                                <a
+                                    href={`https://project-six-rouge.vercel.app${file}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-600 underline"
+                                >
+                                    {activity.files}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
         </div>
