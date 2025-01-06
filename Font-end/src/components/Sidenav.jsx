@@ -182,8 +182,8 @@ const TitleSection = ({ open }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.125 }}
             >
-              <span className="block text-xs font-semibold">TomIsLoading</span>
-              <span className="block text-xs text-slate-500">Pro Plan</span>
+              <span className="block text-xs font-semibold">Dashboard</span>
+              {/* <span className="block text-xs text-slate-500"></span> */}
             </motion.div>
           )}
         </div>

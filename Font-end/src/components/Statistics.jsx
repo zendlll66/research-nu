@@ -68,7 +68,7 @@ const Statistics = () => {
   );
 
   return (
-    <div className="max-w-6xl mx-auto mt-20 grid grid-cols-1 sm:grid-cols-4 gap-8 text-center">
+    <div className="max-w-6xl mx-auto  grid grid-cols-1 sm:grid-cols-4 gap-8 text-center">
       {loading ? (
         <>
           <Skeleton />
