@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { FiMail, FiPhone, FiMapPin, FiCalendar, FiBookOpen } from "react-icons/fi";
 
 const ResearcherDetails = () => {
+    const location = useLocation();
+    const { researcher } = location.state || {};
+
     const { faculty, id } = useParams();
     const [researcherData, setResearcherData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedYear, setSelectedYear] = useState("");
     const [selectedSource, setSelectedSource] = useState("");
+
+    const baseImageUrl = "https://project-six-rouge.vercel.app";
 
     useEffect(() => {
         const fetchResearcher = async () => {
@@ -35,29 +41,27 @@ const ResearcherDetails = () => {
         fetchResearcher();
     }, [faculty, id]);
 
-    if (loading) return (
-        <div className="fixed inset-0 bg-white bg-opacity-10 backdrop-blur-sm flex justify-center items-center z-50">
-            <DotLottieReact
-                className="w-[200px] h-[200px]"
-                src="https://lottie.host/5b8d0182-13bd-40c0-b485-e4621b87aba7/LSlDgjJbnv.lottie"
-                loop
-                autoplay
-            />
-        </div>
-    );
+    if (loading) {
+        return (
+            <div className="fixed inset-0 bg-white bg-opacity-10 backdrop-blur-sm flex justify-center items-center z-50">
+                <DotLottieReact
+                    className="w-[200px] h-[200px]"
+                    src="https://lottie.host/5b8d0182-13bd-40c0-b485-e4621b87aba7/LSlDgjJbnv.lottie"
+                    loop
+                    autoplay
+                />
+            </div>
+        );
+    }
 
     if (error) return <div>Error: {error}</div>;
-
     if (!researcherData || researcherData.length === 0)
         return <div>No researcher data available.</div>;
 
     const researcherName = researcherData[0]?.researcher_name;
-
-    // Extract unique years and sources
     const years = [...new Set(researcherData.map((paper) => paper.year))];
     const sources = [...new Set(researcherData.map((paper) => paper.source.toLowerCase()))];
 
-    // Filter papers by year and source
     const filteredPapers = researcherData.filter((paper) => {
         return (
             (selectedYear ? paper.year === parseInt(selectedYear) : true) &&
@@ -67,8 +71,36 @@ const ResearcherDetails = () => {
 
     return (
         <div className="p-6 mt-20">
-            <h1 className="text-2xl font-bold mb-4">{researcherName}</h1>
-            <h2 className="text-lg font-semibold mb-4">Research Papers</h2>
+            <div className="rounded-t-lg mb-3 grid place-items-center ">
+                <img
+                    className="rounded-md h-full object-cover "
+                    src={`${baseImageUrl}${researcher.imageUrl}`}
+                    alt={researcher.name}
+                />
+            </div>
+            <h1 className="text-3xl font-bold mb-6 text-indigo-700 flex justify-center items-center gap-3">
+                {/* <FiBookOpen className="text-indigo-500" /> */}
+                {researcherName}
+            </h1>
+
+            {/* Contact Information */}
+            <div className="mt-6 bg-gray-50 p-6 rounded-lg shadow-md">
+                <h2 className="text-2xl font-semibold mb-5 flex items-center gap-3">
+                    <FiCalendar className="text-indigo-500" />
+                    Contact Information
+                </h2>
+                <p className="flex items-center gap-2">
+                    <FiMail className="text-indigo-500" /> Email: {researcher.contact}
+                </p>
+                <p className="flex items-center gap-2">
+                    <FiPhone className="text-indigo-500" /> Phone: {researcher.phone}
+                </p>
+                <p className="flex items-center gap-2">
+                    <FiMapPin className="text-indigo-500" /> Office: {researcher.office}
+                </p>
+            </div>
+
+            <h2 className="text-2xl font-semibold mt-8 mb-6">Research Papers</h2>
 
             {/* Dropdown Filters */}
             <div className="flex space-x-4 mb-6">
@@ -121,9 +153,12 @@ const ResearcherDetails = () => {
                         key={index}
                         className="bg-white border rounded-lg p-4 shadow hover:shadow-lg"
                     >
-                        <h3 className="text-md font-semibold">{paper.paper}</h3>
+                        <h3 className="text-md font-semibold flex items-center gap-3">
+                            <FiBookOpen className="text-indigo-500" />
+                            {paper.paper}
+                        </h3>
                         <p className="text-sm text-gray-600">
-                            <span className="font-bold">Year:</span> {paper.year}
+                            <FiCalendar className="inline-block text-indigo-500" /> {paper.year}
                         </p>
                         <p className="text-sm text-gray-600">
                             <span className="font-bold">Source:</span> {paper.source}

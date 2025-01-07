@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { FiMail, FiPhone, FiMapPin, FiUser } from "react-icons/fi";  // เพิ่ม icons
 
 const Research = () => {
   const [selectedFaculty, setSelectedFaculty] = useState("");
@@ -85,7 +86,6 @@ const Research = () => {
       <div className="mt-20 p-6">
         <div className="justify-center items-center flex flex-col p-4 rounded-lg shadow bg-black bg-opacity-10">
           <h1 className="text-2xl font-bold mb-4">Researcher Data</h1>
-          {/* ช่องค้นหา */}
           <div className="mb-4 w-full justify-center items-center flex p-2 rounded-lg">
             <input
               type="text"
@@ -97,9 +97,8 @@ const Research = () => {
           </div>
         </div>
 
-        <div className=" mt-4">
-          {/* เลือกภาควิชา */}
-          <div className="mb-4 flex flex-col sm:flex-row  justify-between">
+        <div className="mt-4">
+          <div className="mb-4 flex flex-col sm:flex-row justify-between">
             <select
               className="border rounded-lg p-3 w-fit h-fit"
               value={selectedFaculty}
@@ -115,8 +114,7 @@ const Research = () => {
               ))}
             </select>
 
-            {/* View Mode Dropdown */}
-            <div className="mb-4 flex   ">
+            <div className="mb-4 flex">
               <select
                 className="border rounded-lg p-2"
                 value={viewMode}
@@ -146,9 +144,7 @@ const Research = () => {
             <div
               key={researcher.id}
               className="bg-white border rounded-lg p-4 shadow hover:shadow-lg"
-              onClick={() =>
-                handleClick(researcher.faculty, researcher.id, researcher)
-              }
+              onClick={() => handleClick(researcher.faculty, researcher.id, researcher)}
             >
               {viewMode === "withImage" && (
                 <div className="rounded-t-lg mb-3 grid place-items-center">
@@ -160,12 +156,34 @@ const Research = () => {
                 </div>
               )}
 
-              <h2 className="text-lg font-semibold">{researcher.name}</h2>
-              {/* <p className="text-gray-600">{researcher.faculty}</p> */}
-              <p className="text-gray-500">{researcher.department || "N/A"}</p>
+              {/* ชื่อผู้วิจัย (ชื่อยาวจะหดลงตามขนาด div) */}
+              <div className="flex items-center overflow-hidden max-w-full">
+                <h2
+                  className="font-semibold flex items-center gap-2  overflow-hidden "
+                  style={{
+                    fontSize: "clamp(1.25rem, 0.80vw, 1.25rem)",  // ปรับขนาดตาม div
+                    minWidth: "fit-content",                // ไม่ให้ข้อความหดจนหายไป
+                    maxWidth: "100%",                       // จำกัดไม่ให้เกินขอบ
+                  }}
+                >
+                  {researcher.name}
+                </h2>
+              </div>
+
+              {/* ข้อมูลติดต่อ (ถ้าไม่มีให้แสดง - ) */}
+              <p className="text-gray-500 flex items-center gap-2">
+                <FiMail /> {researcher.contact || "-"}
+              </p>
+              <p className="text-gray-500 flex items-center gap-2">
+                <FiPhone /> {researcher.phone || "-"}
+              </p>
+              <p className="text-gray-500 flex items-center gap-2">
+                <FiMapPin /> {researcher.office || "-"}
+              </p>
             </div>
           ))}
         </div>
+
       </div>
     </div>
   );
