@@ -17,7 +17,12 @@ const ActivityDetail = () => {
                     const response = await axios.get(
                         `${baseUrl}/activity/${id}`
                     );
-                    setActivity(response.data.data || {});
+                    const data = response.data.data || {};
+                    setActivity({
+                        ...data,
+                        image: parseJsonSafely(data.image), // แปลงเฉพาะกรณีที่เป็น JSON
+                        files: parseJsonSafely(data.files), // แปลงเฉพาะกรณีที่เป็น JSON
+                    });
                 } catch (error) {
                     console.error("Error fetching activity:", error);
                 } finally {
@@ -27,6 +32,16 @@ const ActivityDetail = () => {
             fetchActivity();
         }
     }, [id, activity]);
+
+    // ฟังก์ชันช่วยแปลง JSON แบบปลอดภัย
+    const parseJsonSafely = (str) => {
+        try {
+            return JSON.parse(str || "[]");
+        } catch (error) {
+            console.warn("Invalid JSON:", str);
+            return [];
+        }
+    };
 
     if (isLoading) {
         return (
@@ -40,22 +55,25 @@ const ActivityDetail = () => {
         return <div>Activity not found</div>;
     }
 
-    // ตรวจสอบว่า files มีหรือไม่
-    const files = activity.files ? JSON.parse(activity.files) : [];
+    const { image = [], files = [] } = activity;
 
     return (
         <div className="px-40 mt-20 flex flex-col justify-center items-center">
             {/* แสดงรูปภาพ */}
             <div className=" gap-4 mt-6 flex flex-col">
-                {activity.imageUrl.map((img, index) => (
-                    <div key={index} className="rounded-lg  overflow-hidden bg-slate-400 ">
-                        <img
-                            src={`https://project-six-rouge.vercel.app${img}`}
-                            alt={`news-image-${index}`}
-                            className="w-full h-full "
-                        />
-                    </div>
-                ))}
+                {image.length > 0 ? (
+                    image.map((img, index) => (
+                        <div key={index} className="rounded-lg overflow-hidden bg-slate-400">
+                            <img
+                                src={img}
+                                alt={`news-image-${index}`}
+                                className="w-full h-full"
+                            />
+                        </div>
+                    ))
+                ) : (
+                    <p>No Images Available</p>
+                )}
             </div>
 
             <h1 className="text-2xl font-bold mt-4">{activity.topic}</h1>
@@ -65,26 +83,28 @@ const ActivityDetail = () => {
 
             <div className="mt-4 flex flex-col">
                 <span className="font-bold">Date: {activity.time}</span>
-                <span className="text-sm ml-2">
-                    POST BY: {activity.admin}
-                </span>
+                <span className="text-sm ml-2">POST BY: {activity.admin}</span>
 
                 {/* แสดงไฟล์ */}
                 <div className="mt-6">
                     <h2 className="text-xl font-semibold">Attached Files</h2>
                     <ul className="mt-4 list-disc list-inside space-y-2 mb-20">
-                        {activity.filesUrl.map((file, index) => (
-                            <li key={index}>
-                                <a
-                                    href={`https://project-six-rouge.vercel.app${file}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-600 underline"
-                                >
-                                    {activity.files}
-                                </a>
-                            </li>
-                        ))}
+                        {files.length > 0 ? (
+                            files.map((file, index) => (
+                                <li key={index}>
+                                    <a
+                                        href={file}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-600 underline"
+                                    >
+                                        {file.split("/").pop()}
+                                    </a>
+                                </li>
+                            ))
+                        ) : (
+                            <p>No Files Available</p>
+                        )}
                     </ul>
                 </div>
             </div>

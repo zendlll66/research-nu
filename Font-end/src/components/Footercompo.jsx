@@ -9,11 +9,11 @@ const Footercompo = () => {
             <h1 className="text-2xl font-bold">Faculty of Engineering</h1>
             <p className="text-sm">Research and Development</p>
           </div>
-          {/* <div className="flex space-x-4">
+          <div className="flex space-x-4">
             <a href="#" className="hover:text-gray-400">Home</a>
             <a href="#" className="hover:text-gray-400">About</a>
             <a href="#" className="hover:text-gray-400">Contact</a>
-          </div> */}
+          </div>
         </div>
         <div className="mt-4 text-center text-sm">
           <p>&copy; 2023 Faculty of Engineering. All rights reserved.</p>

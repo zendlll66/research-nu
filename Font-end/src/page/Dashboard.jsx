@@ -14,7 +14,7 @@ const Dashboard = () => {
   return (
     <div className="pt-[-20%]">
       <Sidenav />
-      <button onClick={handleLogout} className="fixed top-0 right-0 m-2 bg-indigo-600 rounded-md px-2 py-1 text-white">Logout</button>
+      <button onClick={handleLogout} className="fixed top-0 right-0 m-2  rounded-md px-2 py-1 text-red-500">Logout</button>
     </div>
   );
 };

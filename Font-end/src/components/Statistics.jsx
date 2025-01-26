@@ -6,7 +6,7 @@ const Statistics = () => {
   const [totalResearchers, setTotalResearchers] = useState(0);
   const [totalPapers, setTotalPapers] = useState(0);
   const [totalActivities, setTotalActivities] = useState(0);
-  const [totalViews, setTotalViews] = useState(0);
+  const [totalVisitors, setTotalVisitors] = useState(0);
   const [loading, setLoading] = useState(true);
 
   // นับ Views จาก Local Storage
@@ -14,7 +14,6 @@ const Statistics = () => {
     const views = parseInt(localStorage.getItem("pageViews")) || 0;
     const newViews = views + 1;
     localStorage.setItem("pageViews", newViews);
-    setTotalViews(newViews);
   };
 
   // ดึงข้อมูลจาก API
@@ -40,13 +39,17 @@ const Statistics = () => {
         );
         const activities = activityRes.data.data || [];
 
-        // นับ paper ทั้งหมดจาก Scopus
-        const totalPapers = papers.length;
+        // 4. ดึงข้อมูลจำนวนผู้เยี่ยมชม
+        const viewsRes = await axios.get(
+          "https://project-six-rouge.vercel.app/home/stats"
+        );
+        const visitors = viewsRes.data.Visitors;
 
         // อัปเดต state
         setTotalResearchers(researchers.length);
-        setTotalPapers(totalPapers);
+        setTotalPapers(papers.length);
         setTotalActivities(activities.length);
+        setTotalVisitors(visitors); // อัปเดตจำนวนผู้เยี่ยมชม
       } catch (error) {
         console.error("Error fetching statistics:", error);
       } finally {
@@ -60,15 +63,15 @@ const Statistics = () => {
 
   // Skeleton Loader
   const Skeleton = () => (
-    <div className="p-6 bg-white shadow-lg rounded-lg animate-pulse">
-      <div className="w-16 h-16 bg-gray-200 mx-auto rounded-full mb-4"></div>
-      <div className="w-24 h-6 bg-gray-200 mx-auto mb-2"></div>
-      <div className="w-32 h-4 bg-gray-200 mx-auto"></div>
+    <div className="p-6 bg-gray-200 shadow-lg rounded-lg animate-pulse">
+      <div className="w-16 h-16 bg-gray-300 mx-auto rounded-full mb-4"></div>
+      <div className="w-1/2 h-6 bg-gray-300 mx-auto mb-2"></div>
+      <div className="w-full h-4 bg-gray-300 mx-auto"></div>
     </div>
   );
 
   return (
-    <div className="max-w-6xl mx-auto  grid grid-cols-1 sm:grid-cols-4 gap-8 text-center">
+    <div className="sm:max-w-5xl  mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8 text-center rounded-lg sm:p-6 p-8 ">
       {loading ? (
         <>
           <Skeleton />
@@ -80,30 +83,30 @@ const Statistics = () => {
         <>
           {/* จำนวนนักวิจัย */}
           <div className="p-6 bg-white shadow-lg rounded-lg">
-            <FiUsers className="text-indigo-600 mx-auto text-4xl mb-4" />
-            <h3 className="text-3xl font-bold">{totalResearchers}</h3>
-            <p className="text-gray-600">Total Researchers</p>
+            <FiUsers className="text-orange-500 mx-auto text-4xl mb-4" />
+            <h3 className="text-3xl font-bold text-orange-500">{totalResearchers}</h3>
+            <p className="text-gray-700">Total Researchers</p>
           </div>
 
           {/* จำนวน paper */}
           <div className="p-6 bg-white shadow-lg rounded-lg">
-            <FiFileText className="text-indigo-600 mx-auto text-4xl mb-4" />
-            <h3 className="text-3xl font-bold">{totalPapers}</h3>
-            <p className="text-gray-600">Total Papers</p>
+            <FiFileText className="text-orange-500 mx-auto text-4xl mb-4" />
+            <h3 className="text-3xl font-bold text-orange-500">{totalPapers}</h3>
+            <p className="text-gray-700">Total Papers</p>
           </div>
 
           {/* จำนวนข่าวทั้งหมด */}
           <div className="p-6 bg-white shadow-lg rounded-lg">
-            <FiClipboard className="text-indigo-600 mx-auto text-4xl mb-4" />
-            <h3 className="text-3xl font-bold">{totalActivities}</h3>
-            <p className="text-gray-600">Total News</p>
+            <FiClipboard className="text-orange-500 mx-auto text-4xl mb-4" />
+            <h3 className="text-3xl font-bold text-orange-500">{totalActivities}</h3>
+            <p className="text-gray-700">Total News</p>
           </div>
 
           {/* จำนวนผู้เข้าชม */}
           <div className="p-6 bg-white shadow-lg rounded-lg">
-            <FiEye className="text-indigo-600 mx-auto text-4xl mb-4" />
-            <h3 className="text-3xl font-bold">{totalViews}</h3>
-            <p className="text-gray-600">Total Views</p>
+            <FiEye className="text-orange-500 mx-auto text-4xl mb-4" />
+            <h3 className="text-3xl font-bold text-orange-500">{totalVisitors}</h3>
+            <p className="text-gray-700">Total Views</p>
           </div>
         </>
       )}
