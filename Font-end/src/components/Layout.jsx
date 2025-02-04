@@ -7,7 +7,7 @@ const navigation = [
   { name: "HOME", href: "/" },
   { name: "RESEARCH", href: "/research" },
   { name: "EBOOK", href: "/ebook" },
-  { name: "DASHBOARD", href: "/dashboard" },
+  { name: "DASHBOARD", href: "/dashboard/postnews" },
 ];
 
 const Layout = () => {
@@ -16,7 +16,7 @@ const Layout = () => {
   const navigate = useNavigate();
 
   const isLoggedIn = localStorage.getItem("token");
-  const isDashboard = location.pathname === "/dashboard";
+  const isDashboard = location.pathname.startsWith("/dashboard"); // ✅ Check if it's `/dashboard` or any child
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -25,6 +25,7 @@ const Layout = () => {
 
   return (
     <div>
+      {/* Render Header only if not on Dashboard or its child */}
       {!isDashboard && (
         <header className="absolute inset-x-0 top-0 z-50">
           <nav
@@ -136,6 +137,7 @@ const Layout = () => {
         </header>
       )}
 
+      {/* Render main content */}
       <main>
         <Outlet />
       </main>

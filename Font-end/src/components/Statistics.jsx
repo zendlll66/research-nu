@@ -29,7 +29,7 @@ const Statistics = () => {
 
         // 2. ดึงข้อมูล Scopus (Paper)
         const scopusRes = await axios.get(
-          "https://project-six-rouge.vercel.app/research/scopus"
+          "https://project-six-rouge.vercel.app/research/Totalpapers"
         );
         const papers = scopusRes.data.data || [];
 

@@ -10,6 +10,13 @@ import ProtectedRoute from "./components/ProtectedRoute"; // นำเข้า 
 import Nopage from "./components/Nopage";
 import ActivityDetail from "./page/ActivityDetail";
 import ResearcherDetails from "./page/ResearcherDetail";
+import Postpage from "./components/Dashboard/Postpage";
+import Editpage from "./components/Dashboard/Editpage";
+import Analytics from "./components/Dashboard/Analytics";
+import EditEbook from "./components/Dashboard/EditEbook";
+import LineBroadcast from "./components/Dashboard/LineBroadcast";
+
+// เพิ่ม component สำหรับหน้าย่อยใน Dashboard
 
 
 const router = createBrowserRouter([
@@ -25,11 +32,19 @@ const router = createBrowserRouter([
             <Dashboard />
           </ProtectedRoute>
         ),
+        children: [
+          { path: "postnews", element: <Postpage/> }, // เส้นทางสำหรับ Post News
+          { path: "edit", element: <Editpage/> }, // เส้นทางสำหรับ Edit
+          { path: "analytics", element: <Analytics/> }, // เส้นทางสำหรับ Analytics
+          { path: "editebook", element: <EditEbook/> }, // เส้นทางสำหรับ Edit Ebook
+          { path: "lineboardcast", element: <LineBroadcast/> }, // เส้นทางสำหรับ Edit Ebook
+        ],
       },
       { path: "ebook", element: <Ebookpage /> },
       { path: "research", element: <Research /> },
-      { path: "/researcher/:faculty/:id", element: <ResearcherDetails/> },
-      { path: "/activity/:id", element: <ActivityDetail/>},
+      { path: "/researcher/:faculty/:id", element: <ResearcherDetails /> },
+      { path: "/activity/:id", element: <ActivityDetail /> },
+
       {
         path: "foradmin",
         element: <Foradmin />,

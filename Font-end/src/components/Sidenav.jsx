@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FiBarChart,
   FiHome,
   FiEdit,
   FiFilePlus,
   FiChevronRight,
+  FiSend
+  
 } from "react-icons/fi";
 import { motion } from "framer-motion";
 import {
@@ -24,6 +27,7 @@ import EditEbook from "./Dashboard/EditEbook";
 import Analytics from "./Dashboard/Analytics";
 
 import { MdOutlineBookmarkAdd } from "react-icons/md";
+import LineBroadcast from "./Dashboard/LineBroadcast";
 
 // Register Chart.js components
 ChartJS.register(
@@ -79,14 +83,14 @@ const Sidebar = ({ selected, setSelected }) => {
       <div className="space-y-1">
         <NavOption
           Icon={FiFilePlus}
-          title="Post News"
+          title="Post/Edit/delete News"
           selected={selected}
           setSelected={setSelected}
           open={open}
         />
         <NavOption
           Icon={FiEdit}
-          title="Edit"
+          title="Edit Researcher"
           selected={selected}
           setSelected={setSelected}
           open={open}
@@ -105,6 +109,13 @@ const Sidebar = ({ selected, setSelected }) => {
           setSelected={setSelected}
           open={open}
         />
+        <NavOption
+          Icon={FiSend}
+          title="Line Boardcast"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+        />
       </div>
       <ToggleClose open={open} setOpen={setOpen} />
     </motion.nav>
@@ -112,11 +123,37 @@ const Sidebar = ({ selected, setSelected }) => {
 };
 
 // Navigation Option Component
+// Navigation Option Component
 const NavOption = ({ Icon, title, selected, setSelected, open }) => {
+  const navigate = useNavigate(); // ใช้ useNavigate
+
+  // Mapping title to route
+  const getRoute = (title) => {
+    switch (title) {
+      case "Post/Edit/delete News":
+        return "/dashboard/postnews";
+      case "Edit":
+        return "/dashboard/edit";
+      case "Analytics":
+        return "/dashboard/analytics";
+      case "Edit Ebook":
+        return "/dashboard/editebook";
+        case "Line Boardcast":
+        return "/dashboard/lineboardcast";
+      default:
+        return "/dashboard";
+    }
+  };
+
+  const handleClick = () => {
+    setSelected(title); // อัปเดต state ของ selected
+    navigate(getRoute(title)); // Navigate ไปยังเส้นทางที่กำหนด
+  };
+
   return (
     <motion.button
       layout
-      onClick={() => setSelected(title)} // อัปเดต selected เมื่อคลิก
+      onClick={handleClick} // ใช้ handleClick
       className={`relative flex h-10 w-full items-center rounded-md transition-colors ${
         selected === title
           ? "bg-orange-100 text-orange-800"
@@ -143,6 +180,7 @@ const NavOption = ({ Icon, title, selected, setSelected, open }) => {
     </motion.button>
   );
 };
+
 
 // Title Section in Sidebar
 const TitleSection = ({ open }) => {
@@ -423,30 +461,25 @@ const MainContent = ({ selected }) => {
       name: "Electrical and Computer Engineering",
       description:
         "Focuses on the design and integration of computer systems, hardware, and electrical circuits.",
-      members: ["Alice", "Bob", "Charlie"],
     },
     {
       name: "Mechanical Engineering",
       description:
         "Focuses on chemical processes and the production of materials and energy.",
-      members: ["Dave", "Eve", "Frank"],
     },
     {
       name: "Civil Engineering",
       description:
         "Specializes in the design, construction, and maintenance of infrastructure projects.",
-      members: ["Grace", "Hank"],
     },
     {
       name: "Industrial Engineering",
       description:
         "Focuses on optimizing processes, systems, and organizations to improve efficiency.",
-      members: ["Ivy", "Jack"],
     },
     {
       name: "Others", // เพิ่มหมวดหมู่ est.
       description: "For researchers without a defined department.",
-      members: ["Kim", "Lee"], // รายชื่อนักวิจัยในหมวดหมู่นี้
     },
   ]);
 
@@ -907,8 +940,8 @@ const MainContent = ({ selected }) => {
 
   return (
     <div className="flex-grow p-6">
-      {selected === "Post News" && <Postpage />}
-      {selected === "Edit" && (
+      {selected === "Post/Edit/delete News" && <Postpage />}
+      {selected === "Edit Researcher" && (
         <div className="space-y-4">
           {selectedMember ? (
             <>
@@ -1064,6 +1097,7 @@ const MainContent = ({ selected }) => {
         <Analytics/>
       )}
       {selected === "Edit Ebook" && <EditEbook />}
+      {selected === "Line Boardcast" && <LineBroadcast/>}
 
       {isEditModalOpen && (
         <EditResearcherModal
