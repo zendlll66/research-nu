@@ -10,6 +10,7 @@ const EditNews = () => {
   const [editFormData, setEditFormData] = useState({
     topic: "",
     detail: "",
+    link: "", // เพิ่มช่อง link
     image: null,
     files: null,
   });
@@ -55,6 +56,7 @@ const EditNews = () => {
     setEditFormData({
       topic: news.topic,
       detail: news.detail,
+      link: news.link || "", // เพิ่ม link
       image: null, // สำหรับอัปโหลดภาพใหม่
       files: null, // สำหรับอัปโหลดไฟล์ใหม่
     });
@@ -77,6 +79,7 @@ const EditNews = () => {
     const data = new FormData();
     data.append("topic", editFormData.topic);
     data.append("detail", editFormData.detail);
+    data.append("link", editFormData.link); // เพิ่ม link
     if (editFormData.image) {
       data.append("image", editFormData.image);
     }
@@ -113,7 +116,7 @@ const EditNews = () => {
           onClick={() => setActiveTab("Edit/Delete")}
           className={`px-4 py-2 rounded-md ${
             activeTab === "Edit/Delete"
-              ? "bg-blue-600 text-white"
+              ? "bg-orange-600 text-white"
               : "bg-gray-200 text-gray-600"
           }`}
         >
@@ -122,7 +125,7 @@ const EditNews = () => {
         {activeTab === "EditNews" && (
           <button
             onClick={() => setActiveTab("EditNews")}
-            className="px-4 py-2 rounded-md bg-yellow-600 text-white"
+            className="px-4 py-2 rounded-md bg-orange-600 text-white"
           >
             Edit News
           </button>
@@ -141,10 +144,13 @@ const EditNews = () => {
                 <div key={news.id} className="p-4 border rounded-md shadow">
                   <h3 className="font-bold">{news.topic}</h3>
                   <p className="text-sm text-gray-500">Detail: {news.detail}</p>
+                  {news.link && (
+                    <p className="text-sm text-blue-500">Link: {news.link}</p>
+                  )}
                   <div className="flex space-x-4 mt-2">
                     <button
                       onClick={() => handleEdit(news)}
-                      className="text-white bg-yellow-500 px-3 py-1 rounded-md hover:bg-yellow-600"
+                      className="text-white bg-orange-500 px-3 py-1 rounded-md hover:bg-orange-600"
                     >
                       Edit
                     </button>
@@ -198,6 +204,21 @@ const EditNews = () => {
               ></textarea>
             </div>
 
+            {/* Link */}
+            <div>
+              <label htmlFor="link" className="block text-sm font-medium text-gray-700">
+                Link
+              </label>
+              <input
+                type="text"
+                id="link"
+                name="link"
+                value={editFormData.link}
+                onChange={handleInputChange}
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+              />
+            </div>
+
             {/* Image */}
             <div>
               <label htmlFor="image" className="block text-sm font-medium text-gray-700">
@@ -237,7 +258,7 @@ const EditNews = () => {
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700"
               >
                 Save Changes
               </button>

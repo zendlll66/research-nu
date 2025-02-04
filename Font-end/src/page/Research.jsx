@@ -162,7 +162,7 @@ const Research = () => {
               )}
               <div className="flex items-center overflow-hidden max-w-full">
                 <h2 className="font-semibold flex items-center gap-2 overflow-hidden">
-                  {researcher.name}
+                {researcher.position}{researcher.name}
                 </h2>
               </div>
               <p className="text-gray-500 flex items-center gap-2">
