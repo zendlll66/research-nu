@@ -14,6 +14,7 @@ export default function Example() {
 
   return (
     <div className="relative bg-white min-h-screen flex flex-col overflow-x-auto">
+    
       {/* Background สีส้มที่อยู่ด้านหลังสุด */}
       <div
         className="absolute inset-0 -z-10 bg-orange-500"
@@ -21,6 +22,7 @@ export default function Example() {
       />
 
       {/* เนื้อหาหลัก */}
+
       <div className="flex-grow">
         {/* Carousel Section */}
         <div className="relative isolate px-6 lg:px-8">

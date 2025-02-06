@@ -153,7 +153,7 @@ const Research = () => {
             >
               {viewMode === "withImage" && (
                 <div className="rounded-t-lg mb-3 grid place-items-center">
-                  <img
+                  <img 
                     className="rounded-md h-40 object-cover"
                     src={researcher.image}
                     alt={researcher.name}

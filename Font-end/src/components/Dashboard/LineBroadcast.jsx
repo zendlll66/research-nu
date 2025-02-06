@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import axios from "axios";
+import { GrAnnounce } from "react-icons/gr";
 
 const LineBroadcast = () => {
   const [message, setMessage] = useState("");
@@ -8,10 +9,8 @@ const LineBroadcast = () => {
   const [link, setLink] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const inputFileRef = useRef(null);
-  const [error, setError] = useState(null);
 
-
-  // ✅ อัปโหลดรูปไป Cloudinary
+  // :white_check_mark: อัปโหลดรูปไป Cloudinary
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -30,13 +29,14 @@ const LineBroadcast = () => {
         formData
       );
       setImage(response.data.secure_url);
-      setError(null); // ✅ รีเซ็ต error ถ้าอัปโหลดสำเร็จ
-    } catch (error) {
-      setError("❌ อัปโหลดรูปไม่สำเร็จ");
+    } catch {
+      alert(":x: อัปโหลดรูปไม่สำเร็จ");
+    } finally {
+      setIsUploading(false);
     }
   };
 
-  // ✅ ส่งข้อความไปยัง LINE Broadcast API
+  // :white_check_mark: ส่งข้อความไปยัง LINE Broadcast API
   const sendBroadcast = async () => {
     if (!message && !image && !link) {
       alert("กรุณากรอกข้อความ อัปโหลดรูป หรือใส่ลิงก์อย่างน้อยหนึ่งอย่าง");
@@ -44,13 +44,13 @@ const LineBroadcast = () => {
     }
 
     if (isUploading) {
-      alert("⏳ กรุณารอให้รูปอัปโหลดเสร็จก่อน...");
+      alert(":hourglass_flowing_sand: กรุณารอให้รูปอัปโหลดเสร็จก่อน...");
       return;
     }
 
     try {
       const payload = { message, image, link };
-      const response = await fetch("http://localhost:5000/api/line-broadcast/send", {
+      const response = await fetch("https://project-six-rouge.vercel.app/broadcast/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -58,25 +58,27 @@ const LineBroadcast = () => {
 
       const data = await response.json();
       if (response.ok) {
-        alert("✅ ส่งข้อความถึงทุกคนสำเร็จ!");
+        alert(":white_check_mark: ส่งข้อความถึงทุกคนสำเร็จ!");
         setMessage("");
         setImage(null);
         setPreviewImage(null);
         setLink("");
         if (inputFileRef.current) inputFileRef.current.value = "";
-        setError(null); // ✅ รีเซ็ต error ถ้าส่งข้อความสำเร็จ
       } else {
-        setError("❌ เกิดข้อผิดพลาด: " + data.error);
+        alert(":x: เกิดข้อผิดพลาด: " + data.error);
       }
-    } catch (error) {
-      setError("❌ ไม่สามารถส่งข้อความได้ กรุณาลองอีกครั้ง");
+    } catch {
+      alert(":x: ไม่สามารถส่งข้อความได้ กรุณาลองอีกครั้ง");
     }
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-lg">
-        <h2 className="text-2xl font-bold text-center mb-4">📢 ส่งข้อความ LINE Broadcast</h2>
+        <h2 className="text-2xl font-bold text-center mb-4 flex justify-center items-center gap-2 p-2 rounded-md">
+          <GrAnnounce />
+          ส่งข้อความ LINE Broadcast
+        </h2>
 
         <textarea
           className="w-full p-2 border rounded-md mb-3"
@@ -86,7 +88,7 @@ const LineBroadcast = () => {
         />
 
         <div className="mb-3">
-          <label className="block font-semibold">🔗 เพิ่มลิงก์ (ถ้ามี)</label>
+          <label className="block font-semibold">เพิ่มลิงก์ (ถ้ามี)</label>
           <input
             type="text"
             className="w-full p-2 border rounded-md"
@@ -97,9 +99,9 @@ const LineBroadcast = () => {
         </div>
 
         <div className="mb-3">
-          <label className="block font-semibold">📷 อัปโหลดรูปภาพ (ถ้ามี)</label>
+          <label className="block font-semibold">:camera: อัปโหลดรูปภาพ (ถ้ามี)</label>
           <input ref={inputFileRef} type="file" accept="image/*" onChange={handleImageUpload} />
-          {isUploading && <p className="text-yellow-500 text-sm mt-2">⏳ กำลังอัปโหลดรูป...</p>}
+          {isUploading && <p className="text-yellow-500 text-sm mt-2">:hourglass_flowing_sand: กำลังอัปโหลดรูป...</p>}
         </div>
 
         {previewImage && (
@@ -109,15 +111,13 @@ const LineBroadcast = () => {
         )}
 
         <button
-          className={`w-full px-4 py-2 text-white font-bold rounded-md ${
-            isUploading ? "bg-gray-400" : "bg-green-500 hover:bg-green-600"
-          }`}
+          className={`w-full px-4 py-2 text-white font-bold rounded-md ${isUploading ? "bg-gray-400" : "bg-green-500 hover:bg-green-600"
+            }`}
           onClick={sendBroadcast}
           disabled={isUploading}
         >
-          🚀 {isUploading ? "กำลังอัปโหลด..." : "ส่งข้อความ"}
+          :rocket: {isUploading ? "กำลังอัปโหลด..." : "ส่งข้อความ"}
         </button>
-        {error && <p className="text-red-500 text-sm mt-2 text-center">{error}</p>}
       </div>
     </div>
   );
