@@ -15,6 +15,7 @@ import Editpage from "./components/Dashboard/Editpage";
 import Analytics from "./components/Dashboard/Analytics";
 import EditEbook from "./components/Dashboard/EditEbook";
 import LineBroadcast from "./components/Dashboard/LineBroadcast";
+import EditRes from "./components/Dashboard/EditRes";
 
 // เพิ่ม component สำหรับหน้าย่อยใน Dashboard
 
@@ -34,10 +35,10 @@ const router = createBrowserRouter([
         ),
         children: [
           { path: "postnews", element: <Postpage/> }, // เส้นทางสำหรับ Post News
-          { path: "edit", element: <Editpage/> }, // เส้นทางสำหรับ Edit
+          { path: "edit", element: <EditRes/> }, // เส้นทางสำหรับ Edit
           { path: "analytics", element: <Analytics/> }, // เส้นทางสำหรับ Analytics
           { path: "editebook", element: <EditEbook/> }, // เส้นทางสำหรับ Edit Ebook
-          { path: "lineboardcast", element: <LineBroadcast/> }, // เส้นทางสำหรับ Edit Ebook
+          { path: "linebroadcast", element: <LineBroadcast/> }, // เส้นทางสำหรับ Edit Ebook
         ],
       },
       { path: "ebook", element: <Ebookpage /> },

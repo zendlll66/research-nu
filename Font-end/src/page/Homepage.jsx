@@ -8,13 +8,14 @@ import Carousels from '../components/Carousels';
 import Footercompo from '../components/Footercompo';
 import Statistics from '../components/Statistics';
 import Swipecarousel from '../components/Swipecarousel';
+import Analytics from '../components/Dashboard/Analytics';
 
 export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="relative bg-white min-h-screen flex flex-col overflow-x-auto">
-    
+
       {/* Background สีส้มที่อยู่ด้านหลังสุด */}
       <div
         className="absolute inset-0 -z-10 bg-orange-500"
@@ -22,7 +23,10 @@ export default function Example() {
       />
 
       {/* เนื้อหาหลัก */}
-
+      {/* Swipcarousel */}
+      <div className="z-20 flex-grow mt-[80px]">
+        <Swipecarousel />
+      </div>
       <div className="flex-grow">
         {/* Carousel Section */}
         <div className="relative isolate px-6 lg:px-8">
@@ -92,6 +96,21 @@ export default function Example() {
         </div>
 
 
+      </div>
+
+      {/* Analytics */}
+      <div className=" py-10 z-20">
+        <div className="max-w-5xl mx-auto px-6 lg:px-8 flex flex-col items-center">
+          <div>
+            <img src="/assets/Achievements.png" alt="" />
+          </div>
+          <h2 className="text-3xl font-bold text-gray-700 text-center">
+            Our Achievements
+          </h2>
+          <div className="mt-8">
+            <Analytics />
+          </div>
+        </div>
       </div>
 
 

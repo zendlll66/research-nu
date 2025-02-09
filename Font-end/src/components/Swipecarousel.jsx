@@ -32,8 +32,8 @@ const Carousel = () => {
     };
 
     return (
-        <div className=" w-full  mx-auto overflow-hidden bg-black bg-opacity-30">
-            <div className=" w-full max-w-6xl mx-auto overflow-hidden rounded-lg">
+        <div className=" w-full  mx-auto overflow-hidden  ">
+            <div className="  w-full max-w-6xl mx-auto overflow-hidden rounded-lg">
                 {/* Slides */}
                 <div className="relative flex w-full h-96">
                     {slides.map((slide, index) => (
@@ -59,21 +59,22 @@ const Carousel = () => {
                             </div>
                         </div>
                     ))}
+                    {/* Navigation Buttons */}
+                    <button
+                        onClick={prevSlide}
+                        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-[100%]"
+                    >
+                        <FiArrowLeft />
+                    </button>
+                    <button
+                        onClick={nextSlide}
+                        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-full"
+                    >
+                        <FiArrowRight />
+                    </button>
                 </div>
 
-                {/* Navigation Buttons */}
-                <button
-                    onClick={prevSlide}
-                    className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-[100%]"
-                >
-                    <FiArrowLeft />
-                </button>
-                <button
-                    onClick={nextSlide}
-                    className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-full"
-                >
-                    <FiArrowRight />
-                </button>
+
             </div>
         </div>
 

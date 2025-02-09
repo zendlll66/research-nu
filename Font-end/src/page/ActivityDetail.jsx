@@ -77,7 +77,7 @@ const ActivityDetail = () => {
             </div>
 
             <h1 className="text-2xl font-bold mt-4">{activity.topic}</h1>
-            <p className="mt-2">{activity.detail}</p>
+            <p className="mt-2 indent-10">{activity.detail}</p>
 
             <div className="border-b-2 border-slate-600 h-5 w-full mt-4"></div>
 
@@ -88,7 +88,7 @@ const ActivityDetail = () => {
                 {/* แสดงไฟล์ */}
                 <div className="mt-6">
                     <h2 className="text-xl font-semibold">Attached Files</h2>
-                    <ul className="mt-4 list-disc list-inside space-y-2 mb-20">
+                    <ul className="mt-4 list-disc list-inside space-y-2 ">
                         {files.length > 0 ? (
                             files.map((file, index) => (
                                 <li key={index}>
@@ -105,6 +105,28 @@ const ActivityDetail = () => {
                         ) : (
                             <p>No Files Available</p>
                         )}
+                    </ul>
+                </div>
+
+                {/* แสดงลิงค์ */}
+                <div className="mt-6 mb-20">
+                    <h2 className="text-xl font-semibold">Related Links</h2>
+                    <ul className="mt-4 list-disc list-inside space-y-2">
+                        {activity.link ? (
+                            <li>
+                                <a
+                                    href={activity.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-600 underline"
+                                >
+                                    {activity.link}
+                                </a>
+                            </li>
+                        ) : (
+                            <p>No Links Available</p>
+                        )}
+
                     </ul>
                 </div>
             </div>

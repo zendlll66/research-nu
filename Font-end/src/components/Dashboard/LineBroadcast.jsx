@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import axios from "axios";
 import { GrAnnounce } from "react-icons/gr";
-
+import { IoIosRocket } from "react-icons/io";
 const LineBroadcast = () => {
   const [message, setMessage] = useState("");
   const [image, setImage] = useState(null);
@@ -99,9 +99,13 @@ const LineBroadcast = () => {
         </div>
 
         <div className="mb-3">
-          <label className="block font-semibold">:camera: อัปโหลดรูปภาพ (ถ้ามี)</label>
+          <div className="flex items-center gap-2">
+
+            <label className="block font-semibold "> อัปโหลดรูปภาพ (ถ้ามี)</label>
+          </div>
+
           <input ref={inputFileRef} type="file" accept="image/*" onChange={handleImageUpload} />
-          {isUploading && <p className="text-yellow-500 text-sm mt-2">:hourglass_flowing_sand: กำลังอัปโหลดรูป...</p>}
+          {isUploading && <p className="text-yellow-500 text-sm mt-2"> กำลังอัปโหลดรูป...</p>}
         </div>
 
         {previewImage && (
@@ -116,7 +120,10 @@ const LineBroadcast = () => {
           onClick={sendBroadcast}
           disabled={isUploading}
         >
-          :rocket: {isUploading ? "กำลังอัปโหลด..." : "ส่งข้อความ"}
+          <div className="flex justify-center items-center gap-2">
+            <IoIosRocket /> {isUploading ? "กำลังอัปโหลด..." : "ส่งข้อความ"}
+          </div>
+
         </button>
       </div>
     </div>
