@@ -94,7 +94,7 @@ const ResearcherDetails = () => {
                     />
                 </div>
                 <h1 className="text-3xl font-bold mb-6 text-black flex justify-center items-center gap-3">
-                    {researcherName}
+                    {researcher.position}{researcherName}
                 </h1>
 
                 {/* Contact Information */}

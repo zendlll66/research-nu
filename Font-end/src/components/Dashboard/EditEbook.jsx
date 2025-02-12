@@ -1,33 +1,42 @@
-import React, { useState } from 'react';
-import LoadingSussFully from '../LoadingSussFully';
+import React, { useState } from "react";
+import LoadingSussFully from "../LoadingSussFully";
 
 const EditEbook = () => {
-  const [link, setLink] = useState('');
-  const [message, setMessage] = useState('');
+  const [link, setLink] = useState("");
+  const [message, setMessage] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  // ✅ ฟังก์ชันอัปเดตลิงก์ Ebook
   const handleSubmit = async () => {
-    setMessage('');
-    setIsLoading('loading');
+    setMessage("");
+    setIsLoading("loading");
+
+    // ✅ ดึง token จาก localStorage
+    const token = localStorage.getItem("token");
+
     try {
-      const response = await fetch('https://project-six-rouge.vercel.app/ebook/edit/1', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ link_to_ebook: link }),
-      });
+      const response = await fetch(
+        "https://project-six-rouge.vercel.app/ebook/edit/1",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ ส่ง token ใน header
+          },
+          body: JSON.stringify({ link_to_ebook: link }),
+        }
+      );
 
       if (response.ok) {
-        setIsLoading('success');
+        setIsLoading("success");
       } else {
-        setMessage('Failed to update the link.');
+        setMessage("Failed to update the link.");
         setIsLoading(false);
       }
     } catch (error) {
-      console.error('Error updating link:', error);
-      setMessage('An error occurred. Please try again.');
+      console.error("Error updating link:", error);
+      setMessage("An error occurred. Please try again.");
       setIsLoading(false);
     } finally {
       setShowConfirm(false);
@@ -45,7 +54,9 @@ const EditEbook = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="w-full max-w-lg bg-white rounded-lg shadow-lg p-8 relative">
-        <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">Edit Ebook Link</h1>
+        <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
+          Edit Ebook Link
+        </h1>
         <form onSubmit={handleSave} className="space-y-6">
           <div>
             <label htmlFor="link" className="block text-sm font-medium text-gray-700 mb-2">
@@ -74,7 +85,9 @@ const EditEbook = () => {
       {showConfirm && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg shadow-lg p-6 space-y-4">
-            <p className="text-lg font-medium text-gray-700">Are you sure you want to change the Ebook?</p>
+            <p className="text-lg font-medium text-gray-700">
+              Are you sure you want to change the Ebook?
+            </p>
             <div className="flex justify-end space-x-4">
               <button
                 onClick={handleSubmit}

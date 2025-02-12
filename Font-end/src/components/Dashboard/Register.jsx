@@ -1,0 +1,143 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+const Register = () => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    fname: "",
+    lname: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
+
+  // ดึง Token จาก LocalStorage (ถ้ามี)
+  const token = localStorage.getItem("token");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("❌ รหัสผ่านไม่ตรงกัน!");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch("https://project-six-rouge.vercel.app/admin/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token && { Authorization: `Bearer ${token}` }), // ส่ง Token ถ้ามี
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          fname: formData.fname,
+          lname: formData.lname,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "สมัครสมาชิกไม่สำเร็จ");
+      }
+
+      setSuccess("✅ สมัครสมาชิกสำเร็จ!");
+      setTimeout(() => navigate("/foradmin"), 2000); // Redirect ไปหน้า Login
+
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center text-orange-600 mb-6">สมัครสมาชิก</h2>
+
+        {error && <p className="text-red-500 text-center">{error}</p>}
+        {success && <p className="text-green-500 text-center">{success}</p>}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            name="fname"
+            placeholder="ชื่อจริง"
+            value={formData.fname}
+            onChange={handleChange}
+            required
+            className="w-full p-3 border border-gray-300 rounded-lg"
+          />
+
+          <input
+            type="text"
+            name="lname"
+            placeholder="นามสกุล"
+            value={formData.lname}
+            onChange={handleChange}
+            required
+            className="w-full p-3 border border-gray-300 rounded-lg"
+          />
+
+          <input
+            type="email"
+            name="email"
+            placeholder="อีเมล"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="w-full p-3 border border-gray-300 rounded-lg"
+          />
+
+          <input
+            type="password"
+            name="password"
+            placeholder="รหัสผ่าน"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            className="w-full p-3 border border-gray-300 rounded-lg"
+          />
+
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="ยืนยันรหัสผ่าน"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+            className="w-full p-3 border border-gray-300 rounded-lg"
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full p-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition"
+          >
+            {loading ? "กำลังสมัคร..." : "สมัครสมาชิก"}
+          </button>
+        </form>
+
+        
+      </div>
+    </div>
+  );
+};
+
+export default Register;

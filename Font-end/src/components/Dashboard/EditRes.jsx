@@ -1,5 +1,7 @@
 import React from 'react'
-import { useState ,useEffect} from 'react'
+import { useState, useEffect } from 'react'
+import Editpage from './Editpage';
+
 const EditRes = () => {
     const [expandedFaculty, setExpandedFaculty] = useState(null);
     const [selectedMember, setSelectedMember] = useState(null);
@@ -12,7 +14,7 @@ const EditRes = () => {
     const [isProcessing, setIsProcessing] = useState(false);
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false); // ✅ Success Modal State
     const [isEditSuccessModalOpen, setIsEditSuccessModalOpen] = useState(false); // ✅ Success Modal สำหรับ Edit
-
+    const token = localStorage.getItem("token");
     const [facultyData, setFacultyData] = useState([
         {
             name: "Electrical and Computer Engineering",
@@ -71,9 +73,9 @@ const EditRes = () => {
                         // position: formData.position, // ✅ ส่งตำแหน่ง
                         // position_thai: formData.position_thai, // ✅ ส่งตำแหน่งภาษาไทย
                     }),
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+
+
+
                 }
             );
 
@@ -164,6 +166,8 @@ const EditRes = () => {
             e.preventDefault();
             console.log("📌 Submitting formData:", formData);
 
+            const token = localStorage.getItem("token"); // ✅ ดึง Token จาก localStorage
+
             const data = new FormData();
             data.append("name", formData.name);
             data.append("name_thai", formData.name_thai);
@@ -174,18 +178,6 @@ const EditRes = () => {
             data.append("contact", formData.contact);
             data.append("phone", formData.phone);
             data.append("office", formData.office);
-
-            if (isSubmitting) return; // ✅ ป้องกันการกดซ้ำ
-            setIsSubmitting(true); // ✅ ปิดปุ่มชั่วคราว
-
-            await onSubmit(formData);
-            setIsSubmitting(false); // ✅ เปิดปุ่มหลังดำเนินการเสร็จ
-
-            setIsSuccessModalOpen(true); // ✅ เปิด Success Modal เมื่อ Submit สำเร็จ
-            setTimeout(() => {
-                setIsSuccessModalOpen(false); // ✅ ปิด Modal อัตโนมัติหลัง 3 วินาที
-                onClose(); // ✅ ปิดฟอร์มการเพิ่มนักวิจัย
-            }, 3000);
 
             if (formData.image) {
                 data.append("image", formData.image);
@@ -198,6 +190,9 @@ const EditRes = () => {
                     `https://project-six-rouge.vercel.app/researcher/${formData.department}/new`,
                     {
                         method: "POST",
+                        headers: {
+                            Authorization: `Bearer ${token}`, // ✅ ส่ง Token ใน Header
+                        },
                         body: data,
                     }
                 );
@@ -205,9 +200,6 @@ const EditRes = () => {
                 const result = await response.json();
                 console.log("📌 API Response:", result);
                 if (response.ok) {
-                    // alert(
-                    //   `Successfully added ${formData.name} to ${formData.department}`
-                    // );
                     window.location.reload();
                 } else {
                     alert("Failed to add researcher: " + result.message);
@@ -726,22 +718,33 @@ const EditRes = () => {
 
     const confirmDelete = async () => {
         if (!deleteTarget) return;
-
+    
+        const token = localStorage.getItem("token"); // ✅ ดึง Token จาก localStorage
+        if (!token) {
+            alert("Unauthorized: No token found.");
+            return;
+        }
+    
         const { facultyName, member } = deleteTarget;
         const department = facultyName;
         const researcherId = member.id;
-
+    
         const deleteUrl = `https://project-six-rouge.vercel.app/researcher/${department}/${researcherId}`;
         if (isProcessing) return; // ✅ ป้องกันการกดซ้ำ
-
+    
         setIsProcessing(true); // ✅ ปิดปุ่มชั่วคราว
-
+    
         try {
-            const response = await fetch(deleteUrl, { method: "DELETE" });
+            const response = await fetch(deleteUrl, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`, // ✅ ส่ง Token ใน Header
+                },
+            });
+    
             const result = await response.json();
-
+    
             if (response.ok) {
-                // alert(`${member.name} has been deleted successfully.`);
                 setFacultyData((prevFacultyData) =>
                     prevFacultyData.map((faculty) =>
                         faculty.name === facultyName
@@ -766,6 +769,7 @@ const EditRes = () => {
             setIsProcessing(false); // ✅ เปิดปุ่มกลับมา
         }
     };
+    
 
     const handleFacultyClick = (facultyName) => {
         setExpandedFaculty((prev) => (prev === facultyName ? null : facultyName));
@@ -853,6 +857,7 @@ const EditRes = () => {
                         "Selected Department in Editpage:",
                         selectedDepartment
                     )}
+
                     <Editpage
                         researcherId={selectedMember.id}
                         name={selectedMember.name}

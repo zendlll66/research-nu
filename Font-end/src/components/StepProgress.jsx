@@ -6,7 +6,7 @@ const StepProgress = () => {
   const [formData, setFormData] = useState({
     topic: "",
     detail: "",
-    images: [], // ✅ แก้ให้เป็น Array
+    images: [], 
     files: [],
     admin: "",
     link: "",
@@ -18,11 +18,14 @@ const StepProgress = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // ✅ ดึง Token จาก LocalStorage
+  const token = localStorage.getItem("token");
+
   // Fetch news items
   useEffect(() => {
     const fetchNews = async () => {
       setIsLoading(true);
-      setError(""); // Reset error
+      setError(""); 
       try {
         const response = await axios.get("https://project-six-rouge.vercel.app/activity");
         setNewsList(response.data.data || []);
@@ -43,7 +46,7 @@ const StepProgress = () => {
     if (files) {
       setFormData((prev) => ({
         ...prev,
-        [name]: Array.from(files), // ✅ แปลง FileList เป็น Array
+        [name]: Array.from(files),
       }));
     } else {
       setFormData((prev) => ({
@@ -57,6 +60,12 @@ const StepProgress = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    if (!token) {
+      alert("❌ Authentication failed! กรุณา Login ก่อนโพสต์ข่าว");
+      setIsSubmitting(false);
+      return;
+    }
+
     const data = new FormData();
     data.append("topic", formData.topic);
     data.append("detail", formData.detail);
@@ -67,16 +76,11 @@ const StepProgress = () => {
       data.append("link", formData.link);
     }
 
-    // ✅ อัปโหลดไฟล์แบบหลายไฟล์
-    if (formData.images.length > 0) {
-      formData.images.forEach((image) => data.append("image", image)); // ใช้ Key "image"
-    }
+    // ✅ อัปโหลดหลายไฟล์
+    formData.images.forEach((image) => data.append("image", image));
+    formData.files.forEach((file) => data.append("files", file));
 
-    if (formData.files.length > 0) {
-      formData.files.forEach((file) => data.append("files", file)); // ใช้ Key "files"
-    }
-
-    console.log("📌 FormData Entries:", [...data.entries()]); // Debug ก่อนส่ง
+    console.log("📌 FormData Entries:", [...data.entries()]);
 
     try {
       const response = await axios.post(
@@ -85,12 +89,13 @@ const StepProgress = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // ✅ ส่ง Token ใน Header
           },
         }
       );
 
       console.log("✅ Success:", response.data);
-      alert("News posted successfully!");
+      alert("🎉 News posted successfully!");
 
       setNewsList([...newsList, response.data]);
 
@@ -104,12 +109,11 @@ const StepProgress = () => {
       });
     } catch (error) {
       console.error("❌ Error posting news:", error.response?.data || error.message);
-      alert(`Failed to post news: ${error.response?.data?.message || error.message}`);
+      alert(`❌ Failed to post news: ${error.response?.data?.message || error.message}`);
     } finally {
       setIsSubmitting(false);
     }
   };
-
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-md">

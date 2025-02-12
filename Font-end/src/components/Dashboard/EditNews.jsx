@@ -6,7 +6,7 @@ const EditNews = () => {
   const [newsList, setNewsList] = useState([]);
   const [selectedNews, setSelectedNews] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  const token = localStorage.getItem("token");
   const [editFormData, setEditFormData] = useState({
     topic: "",
     detail: "",
@@ -18,15 +18,15 @@ const EditNews = () => {
   // ดึงข้อมูลข่าวทั้งหมด
   useEffect(() => {
     const fetchNews = async () => {
+
       setIsLoading(true);
       try {
-        const response = await axios.get(
-          "https://project-six-rouge.vercel.app/activity"
-        );
+        const response = await axios.get("https://project-six-rouge.vercel.app/activity");
         setNewsList(response.data.data || []);
       } catch (error) {
         console.error("Error fetching news:", error);
-        alert("ดึงข้อมูลข่าวไม่สำเร็จ!");
+        // alert("ดึงข้อมูลข่าวไม่สำเร็จ!");
+        alert(`❌ Failed to post news: ${error.response?.data?.message || error.message}`);
       } finally {
         setIsLoading(false);
       }
@@ -38,9 +38,13 @@ const EditNews = () => {
   // ฟังก์ชันลบข่าว
   const handleDelete = async (activityId) => {
     if (!window.confirm("คุณต้องการลบข่าวนี้ใช่หรือไม่?")) return;
-
     try {
-      await axios.delete(`https://project-six-rouge.vercel.app/activity/${activityId}`);
+      await axios.delete(`https://project-six-rouge.vercel.app/activity/${activityId}`, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`, // ✅ ส่ง Token ใน Header
+        },
+      });
       setNewsList(newsList.filter((news) => news.id !== activityId));
       alert("ลบข่าวสำเร็จ!");
     } catch (error) {
@@ -90,8 +94,12 @@ const EditNews = () => {
     try {
       await axios.put(
         `https://project-six-rouge.vercel.app/activity/${selectedNews.id}/edit`,
-        data
-      );
+        data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`, // ✅ ส่ง Token ใน Header
+        },
+      });
       alert("อัปเดตข่าวสำเร็จ!");
 
       // อัปเดต newsList หลังแก้ไข
@@ -114,11 +122,10 @@ const EditNews = () => {
       <div className="flex space-x-4 mb-6">
         <button
           onClick={() => setActiveTab("Edit/Delete")}
-          className={`px-4 py-2 rounded-md ${
-            activeTab === "Edit/Delete"
-              ? "bg-orange-600 text-white"
-              : "bg-gray-200 text-gray-600"
-          }`}
+          className={`px-4 py-2 rounded-md ${activeTab === "Edit/Delete"
+            ? "bg-orange-600 text-white"
+            : "bg-gray-200 text-gray-600"
+            }`}
         >
           Edit/Delete
         </button>

@@ -9,7 +9,7 @@ import {
 import { motion } from "framer-motion";
 import { MdOutlineBookmarkAdd } from "react-icons/md";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
-
+import { FaRegRegistered } from "react-icons/fa6";
 
 // Main Sidenav Component
 const Sidenav = () => {
@@ -80,6 +80,14 @@ const Sidebar = ({ selected, setSelected }) => {
         <NavOption
           Icon={FiHome}
           title="Line Broadcast"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+        />
+
+        <NavOption
+          Icon={FaRegRegistered }
+          title="Register"
           selected={selected}
           setSelected={setSelected}
           open={open}
