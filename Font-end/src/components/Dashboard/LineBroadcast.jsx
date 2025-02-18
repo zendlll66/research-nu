@@ -1,7 +1,8 @@
-import { useState, useRef } from "react";
+import { useState, useRef } from "react"; 
 import axios from "axios";
 import { GrAnnounce } from "react-icons/gr";
 import { IoIosRocket } from "react-icons/io";
+
 const LineBroadcast = () => {
   const [message, setMessage] = useState("");
   const [image, setImage] = useState(null);
@@ -9,8 +10,8 @@ const LineBroadcast = () => {
   const [link, setLink] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const inputFileRef = useRef(null);
+  const token = localStorage.getItem("token");
 
-  // :white_check_mark: อัปโหลดรูปไป Cloudinary
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -36,7 +37,6 @@ const LineBroadcast = () => {
     }
   };
 
-  // :white_check_mark: ส่งข้อความไปยัง LINE Broadcast API
   const sendBroadcast = async () => {
     if (!message && !image && !link) {
       alert("กรุณากรอกข้อความ อัปโหลดรูป หรือใส่ลิงก์อย่างน้อยหนึ่งอย่าง");
@@ -52,7 +52,10 @@ const LineBroadcast = () => {
       const payload = { message, image, link };
       const response = await fetch("https://project-six-rouge.vercel.app/broadcast/send", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
         body: JSON.stringify(payload),
       });
 
@@ -100,10 +103,8 @@ const LineBroadcast = () => {
 
         <div className="mb-3">
           <div className="flex items-center gap-2">
-
-            <label className="block font-semibold "> Upload photo (If there is)</label>
+            <label className="block font-semibold"> Upload photo (If there is)</label>
           </div>
-
           <input ref={inputFileRef} type="file" accept="image/*" onChange={handleImageUpload} />
           {isUploading && <p className="text-yellow-500 text-sm mt-2"> Uploading...</p>}
         </div>
@@ -115,15 +116,13 @@ const LineBroadcast = () => {
         )}
 
         <button
-          className={`w-full px-4 py-2 text-white font-bold rounded-md ${isUploading ? "bg-gray-400" : "bg-green-500 hover:bg-green-600"
-            }`}
+          className={`w-full px-4 py-2 text-white font-bold rounded-md ${isUploading ? "bg-gray-400" : "bg-green-500 hover:bg-green-600"}`}
           onClick={sendBroadcast}
           disabled={isUploading}
         >
           <div className="flex justify-center items-center gap-2">
             <IoIosRocket /> {isUploading ? "Uploading..." : "Send Broadcast"}
           </div>
-
         </button>
       </div>
     </div>
