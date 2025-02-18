@@ -15,7 +15,7 @@ const Register = () => {
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
 
-  // ดึง Token จาก LocalStorage (ถ้ามี)
+  // Retrieve token from localStorage (if available)
   const token = localStorage.getItem("token");
 
   const handleChange = (e) => {
@@ -29,7 +29,7 @@ const Register = () => {
     setSuccess("");
 
     if (formData.password !== formData.confirmPassword) {
-      setError("❌ รหัสผ่านไม่ตรงกัน!");
+      setError("❌ Passwords do not match!");
       return;
     }
 
@@ -40,7 +40,7 @@ const Register = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...(token && { Authorization: `Bearer ${token}` }), // ส่ง Token ถ้ามี
+          ...(token && { Authorization: `Bearer ${token}` }), // Include token if available
         },
         body: JSON.stringify({
           email: formData.email,
@@ -53,11 +53,11 @@ const Register = () => {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message || "สมัครสมาชิกไม่สำเร็จ");
+        throw new Error(result.message || "Registration failed");
       }
 
-      setSuccess("✅ สมัครสมาชิกสำเร็จ!");
-      setTimeout(() => navigate("/foradmin"), 2000); // Redirect ไปหน้า Login
+      setSuccess("✅ Registration successful!");
+      setTimeout(() => navigate("/foradmin"), 2000); // Redirect to admin page
 
     } catch (err) {
       setError(err.message);
@@ -69,7 +69,7 @@ const Register = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-orange-600 mb-6">สมัครสมาชิก</h2>
+        <h2 className="text-2xl font-bold text-center text-orange-600 mb-6">Register</h2>
 
         {error && <p className="text-red-500 text-center">{error}</p>}
         {success && <p className="text-green-500 text-center">{success}</p>}
@@ -78,7 +78,7 @@ const Register = () => {
           <input
             type="text"
             name="fname"
-            placeholder="ชื่อจริง"
+            placeholder="First Name"
             value={formData.fname}
             onChange={handleChange}
             required
@@ -88,7 +88,7 @@ const Register = () => {
           <input
             type="text"
             name="lname"
-            placeholder="นามสกุล"
+            placeholder="Last Name"
             value={formData.lname}
             onChange={handleChange}
             required
@@ -98,7 +98,7 @@ const Register = () => {
           <input
             type="email"
             name="email"
-            placeholder="อีเมล"
+            placeholder="Email"
             value={formData.email}
             onChange={handleChange}
             required
@@ -108,7 +108,7 @@ const Register = () => {
           <input
             type="password"
             name="password"
-            placeholder="รหัสผ่าน"
+            placeholder="Password"
             value={formData.password}
             onChange={handleChange}
             required
@@ -118,7 +118,7 @@ const Register = () => {
           <input
             type="password"
             name="confirmPassword"
-            placeholder="ยืนยันรหัสผ่าน"
+            placeholder="Confirm Password"
             value={formData.confirmPassword}
             onChange={handleChange}
             required
@@ -130,11 +130,9 @@ const Register = () => {
             disabled={loading}
             className="w-full p-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition"
           >
-            {loading ? "กำลังสมัคร..." : "สมัครสมาชิก"}
+            {loading ? "Registering..." : "Register"}
           </button>
         </form>
-
-        
       </div>
     </div>
   );

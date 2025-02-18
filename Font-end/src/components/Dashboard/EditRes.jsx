@@ -53,7 +53,6 @@ const EditRes = () => {
             console.log("📌 Received formData:", formData);
             const formattedDepartment = formData.department;
 
-            // ✅ ตรวจสอบว่าเป็น FormData จริงหรือไม่
             if (!(formData instanceof FormData)) {
                 console.error("🚨 formData is not an instance of FormData!");
                 return;
@@ -63,19 +62,16 @@ const EditRes = () => {
                 formData.append("image", formData.image);
             }
 
+            const token = localStorage.getItem("token"); // ดึง token จาก localStorage
+
             const response = await fetch(
                 `https://project-six-rouge.vercel.app/researcher/${formattedDepartment}/new`,
                 {
                     method: "POST",
-                    body: JSON.stringify({
-                        ...formData,
-                        // image: formData.image, // ส่ง Base64 รูปไปยัง API
-                        // position: formData.position, // ✅ ส่งตำแหน่ง
-                        // position_thai: formData.position_thai, // ✅ ส่งตำแหน่งภาษาไทย
-                    }),
-
-
-
+                    headers: {
+                        Authorization: `Bearer ${token}`, // เพิ่ม header Authorization
+                    },
+                    body: formData,
                 }
             );
 
@@ -83,10 +79,7 @@ const EditRes = () => {
             console.log("📌 Full API Response:", response, result);
 
             if (response.ok) {
-                setIsSuccessModalOpen(true); // ✅ แสดง Success Modal แทนการใช้ alert()
-                // window.location.reload(); // เพิ่มคำสั่งนี้เพื่อรีเฟรชหน้า
-                // alert(`Successfully added ${formData.name} to ${formData.department}`);
-                // Fetch ข้อมูลใหม่หรืออัปเดต `facultyData`
+                setIsSuccessModalOpen(true);
             } else {
                 alert("Failed to add researcher: " + result.message);
             }
@@ -108,8 +101,8 @@ const EditRes = () => {
         const [formData, setFormData] = useState({
             name: "",
             name_thai: "",
-            position: "ไม่ระบุ", // ✅ เพิ่มตำแหน่ง
-            position_thai: "ไม่ระบุ", // ✅ เพิ่มตำแหน่งภาษาไทย
+            position: "", // ✅ เพิ่มตำแหน่ง
+            position_thai: "", // ✅ เพิ่มตำแหน่งภาษาไทย
             department: department || "",
             faculty: "Engineering, Naresuan University",
             contact: "",
@@ -127,8 +120,8 @@ const EditRes = () => {
                 setFormData({
                     name: "",
                     name_thai: "",
-                    position: "ไม่ระบุ",
-                    position_thai: "ไม่ระบุ",
+                    position: "",
+                    position_thai: "",
                     department: department || "",
                     faculty: "Engineering, Naresuan University",
                     contact: "",
@@ -249,7 +242,7 @@ const EditRes = () => {
                                 onChange={handleChange}
                                 className="w-full sm:w-1/3 p-2 border rounded"
                             >
-                                <option value="ไม่ระบุ">ไม่ระบุ</option>
+                                <option value="">Position</option>
                                 <option value="PROF.">PROF.</option>
                                 <option value="PROF. DR.">PROF. DR.</option>
                                 <option value="ASSOC. PROF.">ASSOC. PROF.</option>
@@ -281,7 +274,7 @@ const EditRes = () => {
                                 onChange={handleChange}
                                 className="w-full sm:w-1/3 p-2 border rounded"
                             >
-                                <option value="ไม่ระบุ">ไม่ระบุ</option>
+                                <option value="">ตำแหน่ง</option>
                                 <option value="ศาสตราจารย์">ศาสตราจารย์</option>
                                 <option value="ศาสตราจารย์ ดร.">ศาสตราจารย์ ดร.</option>
                                 <option value="รองศาสตราจารย์">รองศาสตราจารย์</option>
@@ -448,7 +441,7 @@ const EditRes = () => {
                                 onChange={handleChange}
                                 className="w-full sm:w-1/3 p-2 border rounded"
                             >
-                                <option value="ไม่ระบุ">ไม่ระบุ</option>
+                                <option value="">{}</option>
                                 <option value="PROF.">PROF.</option>
                                 <option value="PROF. DR.">PROF. DR.</option>
                                 <option value="ASSOC. PROF.">ASSOC. PROF.</option>
@@ -481,7 +474,7 @@ const EditRes = () => {
                                 onChange={handleChange}
                                 className="w-full sm:w-1/3 p-2 border rounded"
                             >
-                                <option value="ไม่ระบุ">ไม่ระบุ</option>
+                                <option value="">{}</option>
                                 <option value="ศาสตราจารย์">ศาสตราจารย์</option>
                                 <option value="ศาสตราจารย์ ดร.">ศาสตราจารย์ ดร.</option>
                                 <option value="รองศาสตราจารย์">รองศาสตราจารย์</option>
@@ -505,11 +498,12 @@ const EditRes = () => {
                             />
                         </div>
                         <input
-                            type="email"
+                            type="text"
                             name="contact"
                             value={formData.contact}
                             onChange={handleChange}
                             placeholder="Email"
+                            pattern="^$|^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
                             className="w-full p-2 border rounded"
                         />
                         <input
@@ -601,9 +595,9 @@ const EditRes = () => {
                         .map((res) => ({
                             id: res.id,
                             name: res.name || "Unknown",
-                            name_thai: res.name_thai || "ไม่ระบุ",
-                            position: res.position || "ไม่ระบุ", // ✅ ดึงตำแหน่ง
-                            position_thai: res.position_thai || "ไม่ระบุ", // ✅ ดึงตำแหน่งภาษาไทย
+                            name_thai: res.name_thai || "",
+                            position: res.position || "", // ✅ ดึงตำแหน่ง
+                            position_thai: res.position_thai || "", // ✅ ดึงตำแหน่งภาษาไทย
                             department: res.department || "Unspecified",
                             contact: res.contact || "-",
                             phone: res.phone || "-",
@@ -652,9 +646,9 @@ const EditRes = () => {
                         .map((res) => ({
                             id: res.id,
                             name: res.name || "Unknown",
-                            name_thai: res.name_thai || "ไม่ระบุ",
-                            position: res.position || "ไม่ระบุ", // ✅ ดึงตำแหน่ง
-                            position_thai: res.position_thai || "ไม่ระบุ", // ✅ ดึงตำแหน่งภาษาไทย
+                            name_thai: res.name_thai || "",
+                            position: res.position || "", // ✅ ดึงตำแหน่ง
+                            position_thai: res.position_thai || "", // ✅ ดึงตำแหน่งภาษาไทย
                             department: res.department || "Unspecified",
                             contact: res.contact || "-",
                             phone: res.phone || "-",
@@ -677,30 +671,34 @@ const EditRes = () => {
         const researcherId = updatedData.id;
         const updateUrl = `https://project-six-rouge.vercel.app/researcher/${formattedDepartment}/${researcherId}/update`;
 
+        const token = localStorage.getItem("token"); // ดึง token จาก localStorage
+
         const data = new FormData();
         data.append("name", updatedData.name);
         data.append("name_thai", updatedData.name_thai);
-        data.append("position", updatedData.position); // ✅ ส่งตำแหน่ง
-        data.append("position_thai", updatedData.position_thai); // ✅ ส่งตำแหน่งภาษาไทย
+        data.append("position", updatedData.position);
+        data.append("position_thai", updatedData.position_thai);
         data.append("department", updatedData.department);
         data.append("contact", updatedData.contact);
         data.append("phone", updatedData.phone);
         data.append("office", updatedData.office);
 
         if (updatedData.image && updatedData.image instanceof File) {
-            data.append("image", updatedData.image); // ✅ อัปโหลดรูปใหม่หากมีการเปลี่ยนแปลง
+            data.append("image", updatedData.image);
         }
 
         try {
             const response = await fetch(updateUrl, {
                 method: "PUT",
-                body: data, // ✅ ใช้ `FormData` เพื่ออัปโหลดรูป
+                headers: {
+                    Authorization: `Bearer ${token}`, // เพิ่ม header Authorization
+                },
+                body: data,
             });
 
             if (response.ok) {
-                // alert("Researcher updated successfully!");
-                await fetchData(); // โหลดข้อมูลใหม่
-                setIsEditModalOpen(false); // ปิด Modal
+                await fetchData();
+                setIsEditModalOpen(false);
             } else {
                 alert("Failed to update researcher.");
             }
@@ -718,22 +716,22 @@ const EditRes = () => {
 
     const confirmDelete = async () => {
         if (!deleteTarget) return;
-    
+
         const token = localStorage.getItem("token"); // ✅ ดึง Token จาก localStorage
         if (!token) {
             alert("Unauthorized: No token found.");
             return;
         }
-    
+
         const { facultyName, member } = deleteTarget;
         const department = facultyName;
         const researcherId = member.id;
-    
+
         const deleteUrl = `https://project-six-rouge.vercel.app/researcher/${department}/${researcherId}`;
         if (isProcessing) return; // ✅ ป้องกันการกดซ้ำ
-    
+
         setIsProcessing(true); // ✅ ปิดปุ่มชั่วคราว
-    
+
         try {
             const response = await fetch(deleteUrl, {
                 method: "DELETE",
@@ -741,9 +739,9 @@ const EditRes = () => {
                     Authorization: `Bearer ${token}`, // ✅ ส่ง Token ใน Header
                 },
             });
-    
+
             const result = await response.json();
-    
+
             if (response.ok) {
                 setFacultyData((prevFacultyData) =>
                     prevFacultyData.map((faculty) =>
@@ -769,7 +767,7 @@ const EditRes = () => {
             setIsProcessing(false); // ✅ เปิดปุ่มกลับมา
         }
     };
-    
+
 
     const handleFacultyClick = (facultyName) => {
         setExpandedFaculty((prev) => (prev === facultyName ? null : facultyName));
@@ -819,9 +817,9 @@ const EditRes = () => {
                             .map((res) => ({
                                 id: res.id,
                                 name: res.name || "Unknown",
-                                name_thai: res.name_thai || "ไม่ระบุ",
-                                position: res.position || "ไม่ระบุ", // ✅ ดึงตำแหน่ง
-                                position_thai: res.position_thai || "ไม่ระบุ", // ✅ ดึงตำแหน่งภาษาไทย
+                                name_thai: res.name_thai || "",
+                                position: res.position || "", // ✅ ดึงตำแหน่ง
+                                position_thai: res.position_thai || "", // ✅ ดึงตำแหน่งภาษาไทย
                                 department: res.department || "Unspecified",
                                 contact: res.contact || "-",
                                 phone: res.phone || "-",

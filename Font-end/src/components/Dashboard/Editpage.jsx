@@ -11,13 +11,14 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
   const [selectedYear, setSelectedYear] = useState(""); // เก็บปีที่เลือก
   const [currentScopusId, setCurrentScopusId] = useState(null);
   const [selectedSource, setSelectedSource] = useState(""); // ✅ ฟิลเตอร์ Source ที่เพิ่มใหม่
+  const token = localStorage.getItem("token");
 
   // ✅ เก็บ researcherId, name, department ใน localStorage
   const [selectedResearcher, setSelectedResearcher] = useState(() => {
     const savedData = localStorage.getItem("selectedResearcher");
     return savedData ? JSON.parse(savedData) : null;
   });
-  
+
 
   useEffect(() => {
     if (researcherId && name && department) {
@@ -54,7 +55,13 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
         const apiUrl = `https://project-six-rouge.vercel.app/researcher/${researcherDepartment}/${researcher}`;
         console.log("📌 Fetching researcher data from:", apiUrl);
 
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ ส่ง token ใน header
+          },
+        });
+
         if (response.ok) {
           const data = await response.json();
           console.log("📌 Fetched researcher data:", data);
@@ -64,7 +71,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
               data.data
                 .filter((item) => item.paper !== null)
                 .map((item) => ({
-                  id: item.scopus_id,
+                  id: item.research_id || item.id,  // ✅ เช็กว่ามี `scopus_id` หรือไม่ ถ้าไม่มีใช้ `id`
                   title: item.paper,
                   year: item.year,
                   source: item.source,
@@ -72,6 +79,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
                   link_to_paper: item.link_to_paper,
                 }))
             );
+
           } else {
             console.error("🚨 Unexpected data structure:", data);
           }
@@ -93,6 +101,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
   // กรองโปรเจกต์ตามข้อความใน searchTerm
   // ✅ ฟิลเตอร์ข้อมูลตามเงื่อนไขที่เลือก
   const filteredCards = cards.filter((card) => {
+
     const matchesSearch = card.title
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
@@ -130,7 +139,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
   const closeEditModal = () => {
     setIsEditModalOpen(false);
   };
-  
+
 
   const closeAddModal = () => {
     setIsAddModalOpen(false);
@@ -155,6 +164,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // ✅ ส่ง token ใน header
         },
         body: JSON.stringify(newProject),
       });
@@ -166,7 +176,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
         setCards((prevCards) => [
           ...prevCards,
           {
-            id: result.scopus_id, // ใช้ id ที่ได้จาก API
+            id: result.research_id,
             title: newProject.paper,
             year: newProject.year,
             source: newProject.source,
@@ -190,18 +200,30 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
     if (!deleteTarget) return;
 
     const { card, index } = deleteTarget;
+    console.log("📌 Deleting Card:", card); // ✅ ดูค่า card ก่อน
+
+    if (!card.id) {
+      console.error("🚨 Error: card.id is undefined!");
+      alert("Error: Cannot delete this project (ID is missing).");
+      return;
+    }
+
     const formattedDepartment = department;
     const apiUrl = `https://project-six-rouge.vercel.app/researcher/${formattedDepartment}/${researcherId}/${card.id}`;
+
+    console.log("📌 DELETE Request to:", apiUrl); // ✅ เช็ก URL ว่าถูกต้องไหม
 
     try {
       const response = await fetch(apiUrl, {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (response.ok) {
         alert("Project deleted successfully!");
-
-        // อัปเดต state เพื่อเอาการ์ดออก
         setCards((prevCards) => prevCards.filter((_, i) => i !== index));
       } else {
         console.error("Failed to delete project:", response.statusText);
@@ -214,6 +236,9 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
       closeDeleteModal();
     }
   };
+
+
+
 
   const handleEdit = (card) => {
     console.log("📌 Editing Project:", card);
@@ -233,16 +258,12 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
     const formattedDepartment = department;
     const apiUrl = `https://project-six-rouge.vercel.app/researcher/${formattedDepartment}/${researcherId}/${currentScopusId}/edit`;
 
-    console.log("📌 API URL:", apiUrl);
-    console.log("📌 Researcher ID:", researcherId);
-    console.log("📌 Department:", department);
-    console.log("📌 Project Data to Update:", newProject);
-
     try {
       const response = await fetch(apiUrl, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // ✅ ส่ง token ใน header
         },
         body: JSON.stringify(newProject),
       });
@@ -255,17 +276,16 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
           prevCards.map((card) =>
             card.id === currentScopusId
               ? {
-                  ...card,
-                  title: newProject.paper,
-                  year: newProject.year,
-                  source: newProject.source,
-                  cited: newProject.cited,
-                  link_to_paper: newProject.link_to_paper,
-                }
+                ...card,
+                title: newProject.paper,
+                year: newProject.year,
+                source: newProject.source,
+                cited: newProject.cited,
+                link_to_paper: newProject.link_to_paper,
+              }
               : card
           )
         );
-
         alert("Project updated successfully!");
         closeEditModal();
       } else {
@@ -289,7 +309,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
     <div className="p-6">
       <div className="flex items-center justify-between">
         <button
-          className="px-4 py-2 bg-indigo-600 text-white rounded-md"
+          className="px-4 py-2 bg-orange-600 text-white rounded-md"
           onClick={() => {
             setSelectedResearcher(null);
             localStorage.removeItem("selectedResearcher");
@@ -302,14 +322,14 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
           className="px-4 py-2 bg-green-600 text-white rounded-md"
           onClick={openAddModal}
         >
-          + Add Project
+          + Add Research
         </button>
       </div>
 
-      <h1 className="text-2xl font-bold mt-6 text-blue-600">
-        Editing Projects for: {name}
+      <h1 className="text-2xl font-bold mt-6 text-orange-600">
+        Editing Research for: {name}
       </h1>
-      <h1 className="text-xl font-bold mt-6 text-blue-600">
+      <h1 className="text-xl font-bold mt-6 text-orange-600">
         ({selectedResearcher?.department || department})
       </h1>
 
@@ -353,6 +373,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
       {isLoading ? (
         <div className="text-center mt-10">Loading...</div>
       ) : filteredCards.length > 0 ? (
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
           {filteredCards.map((card, index) => (
             <div
@@ -365,6 +386,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
                   alert("No link available for this paper.");
                 }
               }}
+              
             >
               <h2 className="font-bold line-clamp-3 overflow-hidden text-ellipsis break-words">
                 {card.title}
@@ -379,7 +401,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
                     e.stopPropagation(); // ป้องกันไม่ให้เหตุการณ์ส่งไปยัง card
                     handleEdit(card); // ส่งข้อมูล card ที่ต้องการแก้ไข
                   }}
-                  className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
+                  className="px-4 py-2 text-white bg-orange-500 rounded-md hover:bg-orange-600"
                 >
                   Edit
                 </button>

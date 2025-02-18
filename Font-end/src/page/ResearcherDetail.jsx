@@ -46,7 +46,7 @@ const ResearcherDetails = () => {
             <div className="fixed inset-0 bg-white bg-opacity-10 backdrop-blur-sm flex justify-center items-center z-50">
                 <DotLottieReact
                     className="w-[200px] h-[200px]"
-                    src="https://lottie.host/5b8d0182-13bd-40c0-b485-e4621b87aba7/LSlDgjJbnv.lottie"
+                    src="https://lottie.host/74c02537-50db-4466-83a5-3b0a2be997b1/vyiCNxmzKK.lottie"
                     loop
                     autoplay
                 />
@@ -169,45 +169,47 @@ const ResearcherDetails = () => {
                         >
                             <h3 className="text-md font-semibold flex items-center gap-3 text-black">
                                 <FiBookOpen className="text-orange-500" />
-                                {paper.paper}
+                                {paper.paper ?? "No Title"} {/* ✅ ถ้าเป็น null ให้เป็น "No Title" */}
                             </h3>
+
                             <p className="text-sm text-gray-600">
-                                <FiCalendar className="inline-block text-orange-500" /> {paper.year}
+                                <FiCalendar className="inline-block text-orange-500" /> {paper.year ?? "N/A"}
                             </p>
+
                             <p className="text-sm text-gray-600">
-                                <span className="font-bold">Source:</span> {paper.source}
+                                <span className="font-bold">Source:</span> {paper.source ?? "Unknown"}
                             </p>
+
                             <p className="text-sm text-gray-600">
-                                <span className="font-bold">Citations:</span> {paper.cited}
+                                <span className="font-bold">Citations:</span> {paper.cited ?? 0} {/* ✅ ถ้า null ให้เป็น 0 */}
                             </p>
+
                             <a
-                                href={paper.link_to_paper}
+                                href={paper.link_to_paper ?? "#"}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-orange-500 hover:underline"
                             >
                                 View Paper
                             </a>
-
-
                         </div>
                     ))}
 
+                <div
+                    aria-hidden="true"
+                    className="fixed  inset-x-0 top-[calc(100%-13rem)] z-[-10] transform-gpu overflow-hidden blur-xl sm:top-[calc(100%-30rem)]"
+                >
                     <div
-                        aria-hidden="true"
-                        className="fixed  inset-x-0 top-[calc(100%-13rem)] z-[-10] transform-gpu overflow-hidden blur-xl sm:top-[calc(100%-30rem)]"
-                    >
-                        <div
-                            style={{
-                                clipPath:
-                                    'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-                            }}
-                            className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-orange-500 to-white opacity-50 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
-                        />
-                    </div>
+                        style={{
+                            clipPath:
+                                'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                        }}
+                        className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-orange-500 to-white opacity-50 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
+                    />
                 </div>
             </div>
         </div>
+        </div >
 
     );
 };

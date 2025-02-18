@@ -1,23 +1,23 @@
-import React, { useState } from "react";
-import { FiArrowRight } from "react-icons/fi";
-import { FiArrowLeft } from "react-icons/fi";
+import React, { useState, useEffect } from "react";
+import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Carousel = () => {
     const slides = [
         {
-            image: "https://via.placeholder.com/1200x400",
-            title: "slide 1",
-            description: "Supporting in-person discussions about preprints",
+            image: "assets/one.jpg",
+            title: "Engineering Research Hub",
+            description: "Access the latest research papers, statistics, and researcher profiles from Naresuan University.",
         },
         {
-            image: "https://via.placeholder.com/1200x400/aaaaaa",
-            title: "Slide 2",
-            description: "Another beautiful description here.",
+            image: "assets/two.jpg",
+            title: "Stay Updated via LINE",
+            description: "Never miss an update! Receive notifications about new research and important updates via LINE Broadcast.",
         },
         {
-            image: "https://via.placeholder.com/1200x400/cccccc",
-            title: "Slide 3",
-            description: "More details about this slide.",
+            image: "assets/three.jpg",
+            title: "eBooks & Knowledge Resources",
+            description: "Download eBooks and explore full research articles to enhance your learning and development.",
         },
     ];
 
@@ -31,53 +31,84 @@ const Carousel = () => {
         setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
     };
 
+    useEffect(() => {
+        const interval = setInterval(nextSlide, 10000); // Auto-slide every 10 seconds
+        return () => clearInterval(interval);
+    }, []);
+
     return (
-        <div className=" w-full  mx-auto overflow-hidden  ">
-            <div className="  w-full max-w-6xl mx-auto overflow-hidden rounded-lg">
-                {/* Slides */}
+        <div className="w-full mx-auto overflow-hidden">
+            <div className="w-full max-w-6xl mx-auto overflow-hidden rounded-lg shadow-2xl">
                 <div className="relative flex w-full h-96">
                     {slides.map((slide, index) => (
                         <div
                             key={index}
-                            className={`absolute w-full h-full transition-transform duration-700 ${index === currentSlide ? "translate-x-0" : "translate-x-full"
-                                }`}
-                            style={{
-                                transform: `translateX(${(index - currentSlide) * 100}%)`,
-                            }}
+                            className={`absolute w-full h-full transition-opacity duration-700 ${index === currentSlide ? "opacity-100" : "opacity-0"}`}
                         >
                             <div
                                 className="w-full h-full bg-cover bg-center"
                                 style={{ backgroundImage: `url(${slide.image})` }}
                             >
                                 <div className="bg-black bg-opacity-50 h-full flex flex-col items-center justify-center text-white text-center px-4">
-                                    <h2 className="text-3xl font-bold mb-2">{slide.title}</h2>
-                                    <p className="mb-4">{slide.description}</p>
-                                    <button className="px-4 py-2 bg-orange-500 hover:bg-orange-600 rounded">
-                                        Learn more
-                                    </button>
+                                    <AnimatePresence mode="wait">
+                                        {index === currentSlide && (
+                                            <motion.div
+                                                key={currentSlide}
+                                                initial={{ opacity: 0, y: -20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: 20 }}
+                                                transition={{ duration: 0.5 }}
+                                                className="space-y-4"
+                                            >
+                                                <motion.h2
+                                                    className="text-4xl font-bold mb-2 text-orange-500"
+                                                    initial={{ opacity: 0, x: -50 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    transition={{ delay: 0.2, duration: 0.5 }}
+                                                >
+                                                    {slide.title}
+                                                </motion.h2>
+                                                <motion.p
+                                                    className="text-lg mb-4"
+                                                    initial={{ opacity: 0, x: 50 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    transition={{ delay: 0.4, duration: 0.5 }}
+                                                >
+                                                    {slide.description}
+                                                </motion.p>
+                                                <motion.button
+                                                    className="px-6 py-3 bg-orange-500 hover:bg-orange-600 rounded-lg text-white font-semibold"
+                                                    whileHover={{ scale: 1.05 }}
+                                                    whileTap={{ scale: 0.95 }}
+                                                    initial={{ opacity: 0, y: 20 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    transition={{ delay: 0.6, duration: 0.5 }}
+                                                >
+                                                    Learn more
+                                                </motion.button>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
                             </div>
                         </div>
                     ))}
-                    {/* Navigation Buttons */}
-                    <button
+                    <motion.button
                         onClick={prevSlide}
-                        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-[100%]"
+                        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-3 hover:p-4 duration-300 rounded-full shadow-lg"
                     >
-                        <FiArrowLeft />
-                    </button>
-                    <button
+                        <FiArrowLeft size={24} />
+                    </motion.button>
+                    <motion.button
                         onClick={nextSlide}
-                        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-full"
+                        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-3  hover:p-4 duration-300 rounded-full shadow-lg"
+                        
                     >
-                        <FiArrowRight />
-                    </button>
+                        <FiArrowRight size={24} />
+                    </motion.button>
                 </div>
-
-
             </div>
         </div>
-
     );
 };
 

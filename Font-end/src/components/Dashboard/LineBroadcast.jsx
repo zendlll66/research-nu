@@ -77,22 +77,22 @@ const LineBroadcast = () => {
       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-lg">
         <h2 className="text-2xl font-bold text-center mb-4 flex justify-center items-center gap-2 p-2 rounded-md">
           <GrAnnounce />
-          ส่งข้อความ LINE Broadcast
+          LINE Broadcast
         </h2>
 
         <textarea
           className="w-full p-2 border rounded-md mb-3"
-          placeholder="พิมพ์ข้อความ..."
+          placeholder="Type a message..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
 
         <div className="mb-3">
-          <label className="block font-semibold">เพิ่มลิงก์ (ถ้ามี)</label>
+          <label className="block font-semibold">Link (If there is)</label>
           <input
             type="text"
             className="w-full p-2 border rounded-md"
-            placeholder="วางลิงก์..."
+            placeholder="Paste the link..."
             value={link}
             onChange={(e) => setLink(e.target.value)}
           />
@@ -101,11 +101,11 @@ const LineBroadcast = () => {
         <div className="mb-3">
           <div className="flex items-center gap-2">
 
-            <label className="block font-semibold "> อัปโหลดรูปภาพ (ถ้ามี)</label>
+            <label className="block font-semibold "> Upload photo (If there is)</label>
           </div>
 
           <input ref={inputFileRef} type="file" accept="image/*" onChange={handleImageUpload} />
-          {isUploading && <p className="text-yellow-500 text-sm mt-2"> กำลังอัปโหลดรูป...</p>}
+          {isUploading && <p className="text-yellow-500 text-sm mt-2"> Uploading...</p>}
         </div>
 
         {previewImage && (
@@ -121,7 +121,7 @@ const LineBroadcast = () => {
           disabled={isUploading}
         >
           <div className="flex justify-center items-center gap-2">
-            <IoIosRocket /> {isUploading ? "กำลังอัปโหลด..." : "ส่งข้อความ"}
+            <IoIosRocket /> {isUploading ? "Uploading..." : "Send Broadcast"}
           </div>
 
         </button>

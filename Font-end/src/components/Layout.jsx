@@ -7,7 +7,7 @@ const navigation = [
   { name: "HOME", href: "/" },
   { name: "RESEARCH", href: "/research" },
   { name: "EBOOK", href: "/ebook" },
-  { name: "DASHBOARD", href: "/dashboard/postnews" },
+  { name: "DASHBOARD", href: "/dashboard/managenews" },
 ];
 
 const Layout = () => {

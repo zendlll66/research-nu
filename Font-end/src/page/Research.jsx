@@ -136,7 +136,7 @@ const Research = () => {
           <div className="fixed inset-0 bg-white bg-opacity-10 backdrop-blur-sm flex justify-center items-center z-50">
             <DotLottieReact
               className="w-[200px] h-[200px]"
-              src="https://lottie.host/5b8d0182-13bd-40c0-b485-e4621b87aba7/LSlDgjJbnv.lottie"
+              src="https://lottie.host/74c02537-50db-4466-83a5-3b0a2be997b1/vyiCNxmzKK.lottie"
               loop
               autoplay
             />

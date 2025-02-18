@@ -49,7 +49,7 @@ const Sidebar = ({ selected, setSelected }) => {
       <div className="space-y-1">
         <NavOption
           Icon={FiFilePlus}
-          title="Post News"
+          title="Manage News"
           selected={selected}
           setSelected={setSelected}
           open={open}
@@ -57,7 +57,7 @@ const Sidebar = ({ selected, setSelected }) => {
         />
         <NavOption
           Icon={FiEdit}
-          title="Edit"
+          title="Manage Researcher"
           selected={selected}
           setSelected={setSelected}
           open={open}
@@ -72,7 +72,7 @@ const Sidebar = ({ selected, setSelected }) => {
         />
         <NavOption
           Icon={MdOutlineBookmarkAdd}
-          title="Edit Ebook"
+          title="Manage Ebook"
           selected={selected}
           setSelected={setSelected}
           open={open}
