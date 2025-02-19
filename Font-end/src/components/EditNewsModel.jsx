@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 
-const EditNewsModel = ({editFormData}) => {
-     
+const EditNewsModel = ({ editFormData, setEditFormData, setActiveTab, selectedNews, newsList, setNewsList }) => {
+    
+
     // ฟังก์ชันบันทึกข้อมูลหลังแก้ไข
     const handleSaveEdit = async (e) => {
         e.preventDefault();
-
+        const token = localStorage.getItem("token");
         const data = new FormData();
         data.append("topic", editFormData.topic);
         data.append("detail", editFormData.detail);
@@ -42,17 +43,16 @@ const EditNewsModel = ({editFormData}) => {
         }
     };
 
-      // ฟังก์ชันเปลี่ยนข้อมูลในฟอร์ม
-  const handleInputChange = (e) => {
-    const { name, value, files } = e.target;
-    if (files) {
-      setEditFormData({ ...editFormData, [name]: files[0] });
-    } else {
-      setEditFormData({ ...editFormData, [name]: value });
-    }
-  };
+    // ฟังก์ชันเปลี่ยนข้อมูลในฟอร์ม
+    const handleInputChange = (e) => {
+        const { name, value, files } = e.target;
+        setEditFormData((prev) => ({
+            ...prev,
+            [name]: files ? files[0] : value
+        }));
+    };
 
-    
+
     return (
         <div>
             <h1 className="text-2xl  font-bold mb-6">Edit News</h1>

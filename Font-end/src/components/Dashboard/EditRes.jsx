@@ -406,7 +406,7 @@ const EditRes = () => {
         if (!isOpen) return null;
 
         return (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="fixed  inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <div className="bg-white p-6 rounded-md w-[570px] flex flex-col items-center">
                     <h2 className="text-xl font-bold mb-4">Edit Researcher</h2>
                     <form onSubmit={handleSubmit} className="space-y-4 w-full">
@@ -441,7 +441,7 @@ const EditRes = () => {
                                 onChange={handleChange}
                                 className="w-full sm:w-1/3 p-2 border rounded"
                             >
-                                <option value="">{}</option>
+                                <option value="">{ }</option>
                                 <option value="PROF.">PROF.</option>
                                 <option value="PROF. DR.">PROF. DR.</option>
                                 <option value="ASSOC. PROF.">ASSOC. PROF.</option>
@@ -474,7 +474,7 @@ const EditRes = () => {
                                 onChange={handleChange}
                                 className="w-full sm:w-1/3 p-2 border rounded"
                             >
-                                <option value="">{}</option>
+                                <option value="">{ }</option>
                                 <option value="ศาสตราจารย์">ศาสตราจารย์</option>
                                 <option value="ศาสตราจารย์ ดร.">ศาสตราจารย์ ดร.</option>
                                 <option value="รองศาสตราจารย์">รองศาสตราจารย์</option>
@@ -558,7 +558,7 @@ const EditRes = () => {
                             </button>
                             <button
                                 type="submit"
-                                className="px-4 py-2 bg-blue-500 text-white rounded"
+                                className="px-4 py-2 bg-orange-500 text-white rounded"
                             >
                                 Save
                             </button>
@@ -847,14 +847,11 @@ const EditRes = () => {
         console.log("📌 Faculty Data Updated (After Fetch):", facultyData);
     }, [facultyData]);
     return (
-        <div className="space-y-4">
+        <div className="w-full">
             {selectedMember ? (
                 <>
                     {console.log("Selected Member in Editpage:", selectedMember)}
-                    {console.log(
-                        "Selected Department in Editpage:",
-                        selectedDepartment
-                    )}
+                    {console.log("Selected Department in Editpage:", selectedDepartment)}
 
                     <Editpage
                         researcherId={selectedMember.id}
@@ -867,15 +864,17 @@ const EditRes = () => {
                 facultyData.map((faculty) => (
                     <div
                         key={faculty.name}
-                        className="bg-white border-2 rounded-lg w-full cursor-pointer mt-10"
+                        className="bg-white rounded-lg border  sm:max-w-full  cursor-pointer mt-5 shadow-sm hover:shadow-md transition-shadow"
                     >
                         {/* Header Section */}
                         <div
-                            className="relative flex items-center justify-between p-4 cursor-pointer"
+                            className="relative flex items-center justify-between p-4 cursor-pointer "
                             onClick={() => handleFacultyClick(faculty.name)}
                         >
-                            <div className="flex flex-col">
-                                <span className="font-semibold">{faculty.name}</span>
+                            <div className="flex flex-col  ">
+                                <span className="font-semibold text-lg sm:text-xl ">
+                                    {faculty.name}
+                                </span>
                                 <span className="text-sm text-gray-600">
                                     {faculty.description}
                                 </span>
@@ -887,15 +886,15 @@ const EditRes = () => {
 
                         {/* Dropdown Content */}
                         <div
-                            className={`bg-gray-50 px-4 pb-4 space-y-2 overflow-hidden transition-all duration-200 ease-in-out ${expandedFaculty === faculty.name
-                                ? "max-h-[400px] opacity-100 overflow-y-auto"
-                                : "max-h-0 opacity-0 pb-0"
+                            className={`bg-gray-50 px-4 pb-4 space-y-2 overflow-hidden transition-all  duration-200 ease-in-out ${expandedFaculty === faculty.name
+                                    ? "max-h-[500px] opacity-100 overflow-y-auto"
+                                    : "max-h-0 opacity-0 pb-0"
                                 }`}
                         >
                             {/* Add Researcher Button */}
                             <div className="flex justify-end space-x-2">
                                 <button
-                                    className="bg-green-500 text-white px-4 py-2 rounded-md"
+                                    className="bg-green-500 text-white px-4 py-2 rounded-md text-sm sm:text-base hover:bg-green-600 transition-colors"
                                     onClick={() => openModal(faculty.name)}
                                 >
                                     Add Researcher
@@ -904,27 +903,25 @@ const EditRes = () => {
 
                             {/* Delete Confirmation Modal */}
                             {isDeleteModalOpen && (
-                                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                                    <div className="bg-white p-6 rounded-md w-96">
-                                        <h2 className="text-xl font-bold mb-4">
-                                            Confirm Delete
-                                        </h2>
+                                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                                    <div className="bg-white p-6 rounded-md w-11/12 sm:w-96">
+                                        <h2 className="text-xl font-bold mb-4">Confirm Delete</h2>
                                         <p>
                                             Are you sure you want to delete{" "}
                                             <strong>{deleteTarget?.member.name}</strong>?
                                         </p>
                                         <div className="flex justify-end mt-6 space-x-4">
                                             <button
-                                                onClick={() => setIsDeleteModalOpen(false)} // ปิด Modal
-                                                className="px-4 py-2 bg-gray-500 text-white rounded-md"
+                                                onClick={() => setIsDeleteModalOpen(false)}
+                                                className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
                                             >
                                                 Cancel
                                             </button>
                                             <button
                                                 onClick={confirmDelete}
-                                                className={`px-4 py-2 text-white rounded ${isProcessing ? "bg-gray-400" : "bg-red-500"
-                                                    }`}
-                                                disabled={isProcessing} // ✅ ป้องกันการกดซ้ำ
+                                                className={`px-4 py-2 text-white rounded ${isProcessing ? "bg-gray-400" : "bg-red-500 hover:bg-red-600"
+                                                    } transition-colors`}
+                                                disabled={isProcessing}
                                             >
                                                 {isProcessing ? "Deleting..." : "Delete"}
                                             </button>
@@ -938,7 +935,7 @@ const EditRes = () => {
                                 faculty.members.map((member, index) => (
                                     <div
                                         key={`${member.name}-${index}`}
-                                        className="flex justify-between items-center bg-white border rounded-lg p-2 hover:bg-gray-100"
+                                        className="md:flex md:flex-row md:justify-between  flex-col space-y-2 md:items-center   bg-white  rounded-lg p-2 hover:bg-gray-100 transition-colors"
                                         onClick={() => {
                                             handleMemberClick(member);
                                             console.log("Selected Member:", member);
@@ -946,29 +943,26 @@ const EditRes = () => {
                                             if (!member.id) {
                                                 console.error("Member ID is undefined:", member);
                                             }
-                                            setSelectedMember(member); // เก็บข้อมูลนักวิจัยที่เลือก
-                                            setSelectedDepartment(faculty.name); // เก็บแผนกของนักวิจัยที่เลือก
+                                            setSelectedMember(member);
+                                            setSelectedDepartment(faculty.name);
                                         }}
                                     >
                                         <div className="flex items-center space-x-3">
                                             <img
-                                                src={
-                                                    member.imageUrl ||
-                                                    "https://via.placeholder.com/150"
-                                                } // กรณี imageUrl ไม่มีค่า
+                                                src={member.imageUrl || "https://via.placeholder.com/150"}
                                                 alt={member.name}
                                                 className="w-10 h-10 rounded-full object-cover"
                                                 onError={(e) => {
                                                     e.target.src =
-                                                        "https://dummyimage.com/150x150/cccccc/ffffff.png&text=No+Image"; // แสดงรูป default หากรูปจาก URL โหลดไม่ได้
+                                                        "https://dummyimage.com/150x150/cccccc/ffffff.png&text=No+Image";
                                                 }}
                                             />
-                                            <span>{member.name}</span>
+                                            <span className="text-sm sm:text-base">{member.name}</span>
                                         </div>
 
-                                        <div className="flex space-x-2">
+                                        <div className="flex space-x-2 justify-end">
                                             <button
-                                                className=" bg-blue-500 text-white px-4 py-2 rounded-md"
+                                                className="bg-orange-500 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-md text-sm sm:text-base hover:bg-orange-600 transition-colors"
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     handleEditClick(member);
@@ -977,10 +971,10 @@ const EditRes = () => {
                                                 Edit
                                             </button>
                                             <button
-                                                className="flex-1 bg-red-500 text-white px-4 py-2 rounded-md text-center"
+                                                className="bg-red-500 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-md text-sm sm:text-base hover:bg-red-600 transition-colors"
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    handleDeleteMember(faculty.name, member); // ส่ง `faculty.name` และ `member`
+                                                    handleDeleteMember(faculty.name, member);
                                                 }}
                                             >
                                                 Delete
@@ -1007,34 +1001,35 @@ const EditRes = () => {
                 />
             )}
 
-            {/* ✅ Success Modal เมื่อแก้ไขเสร็จ */}
+            {/* Success Modal เมื่อแก้ไขเสร็จ */}
             {isEditSuccessModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded-md text-center w-[400px]">
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded-md text-center w-11/12 sm:w-[400px]">
                         <h2 className="text-green-600 text-lg font-bold">Success!</h2>
                         <p className="mt-2 text-gray-700">
                             Researcher information has been updated successfully.
                         </p>
                         <button
                             onClick={() => setIsEditSuccessModalOpen(false)}
-                            className="mt-4 px-4 py-2 bg-green-500 text-white rounded"
+                            className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
                         >
                             OK
                         </button>
                     </div>
                 </div>
             )}
-            {/* ✅ Success Modal */}
+
+            {/* Success Modal */}
             {isSuccessModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded-md text-center w-[400px]">
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded-md text-center w-11/12 sm:w-[400px]">
                         <h2 className="text-green-600 text-lg font-bold">Success!</h2>
                         <p className="mt-2 text-gray-700">
                             Researcher has been added successfully.
                         </p>
                         <button
                             onClick={() => setIsSuccessModalOpen(false)}
-                            className="mt-4 px-4 py-2 bg-green-500 text-white rounded"
+                            className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
                         >
                             OK
                         </button>
@@ -1047,9 +1042,8 @@ const EditRes = () => {
                 isOpen={isModalOpen}
                 onClose={closeModal}
                 onSubmit={(formData) => {
-                    handleAddNewResearcher(formData); // เรียกฟังก์ชัน handleAddNewResearcher
+                    handleAddNewResearcher(formData);
                     console.log("Submitted data:", formData);
-                    // คุณสามารถใส่ logic การส่ง API หรืออัปเดต State ที่นี่
                     closeModal();
                 }}
                 department={selectedDepartment}

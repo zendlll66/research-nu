@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import EditNewsModel from "../EditNewsModel";
 
 const EditNews = () => {
   const [activeTab, setActiveTab] = useState("Edit/Delete");
@@ -19,6 +18,14 @@ const EditNews = () => {
     files: null,
   });
 
+  // ฟังก์ชันตัดข้อความ
+  const truncateText = (text, maxLength = 300) => {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + "...";
+    }
+    return text;
+  };
+
   // ดึงข้อมูลข่าวทั้งหมด
   const fetchNews = async (page = 1, search = "") => {
     setIsLoading(true);
@@ -27,7 +34,7 @@ const EditNews = () => {
         `https://project-six-rouge.vercel.app/activity?page=${page}`
       );
       setNewsList(response.data.data || []);
-      setTotalPages(response.data.total_pages || 1); // ตั้งค่า totalPages จาก API
+      setTotalPages(response.data.total_pages || 1);
     } catch (error) {
       console.error("Error fetching news:", error);
       alert(`❌ Failed to fetch news: ${error.response?.data?.message || error.message}`);
@@ -69,6 +76,16 @@ const EditNews = () => {
       image: null,
       files: null,
     });
+  };
+
+  // ฟังก์ชันเปลี่ยนข้อมูลในฟอร์ม
+  const handleInputChange = (e) => {
+    const { name, value, files } = e.target;
+    if (files) {
+      setEditFormData({ ...editFormData, [name]: files[0] });
+    } else {
+      setEditFormData({ ...editFormData, [name]: value });
+    }
   };
 
   // ฟังก์ชันบันทึกข้อมูลหลังแก้ไข
@@ -113,29 +130,21 @@ const EditNews = () => {
     }
   };
 
-  // ฟังก์ชันตัดข้อความ
-  const truncateText = (text, maxLength = 300) => {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + "...";
-    }
-    return text;
-  };
-
   // ฟังก์ชันเปลี่ยนหน้า
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
-      fetchNews(newPage, searchTerm); // ดึงข้อมูลใหม่เมื่อเปลี่ยนหน้า
+      fetchNews(newPage, searchTerm);
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-md">
+    <div className="max-w-4xl mx-auto p-4 sm:p-6 bg-white shadow-lg rounded-md">
       {/* Tab Navigation */}
-      <div className="flex space-x-4 mb-6">
+      <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mb-6">
         <button
           onClick={() => setActiveTab("Edit/Delete")}
-          className={`px-4 py-2 rounded-md ${
+          className={`px-4 py-2 rounded-md text-sm sm:text-base ${
             activeTab === "Edit/Delete"
               ? "bg-orange-600 text-white"
               : "bg-gray-200 text-gray-600"
@@ -146,7 +155,7 @@ const EditNews = () => {
         {activeTab === "EditNews" && (
           <button
             onClick={() => setActiveTab("EditNews")}
-            className="px-4 py-2 rounded-md bg-orange-600 text-white"
+            className="px-4 py-2 rounded-md bg-orange-600 text-white text-sm sm:text-base"
           >
             Edit News
           </button>
@@ -158,22 +167,11 @@ const EditNews = () => {
         <div>
           <h1 className="text-2xl font-bold mb-6">Edit/Delete News</h1>
 
-          {/* Search Bar */}
-          {/* <div className="mb-6">
-            <input
-              type="text"
-              placeholder="ค้นหาข่าว..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-2 border rounded-md"
-            />
-          </div> */}
-
           {isLoading ? (
             <p>Loading news...</p>
           ) : (
             <div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {newsList.map((news) => (
                   <div
                     key={news.id}
@@ -214,17 +212,17 @@ const EditNews = () => {
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className="px-4 py-2 bg-gray-200 rounded-md disabled:opacity-50"
+                  className="px-4 py-2 bg-gray-200 rounded-md disabled:opacity-50 text-sm sm:text-base"
                 >
                   Previous
                 </button>
-                <span>
+                <span className="text-sm sm:text-base">
                   Page {currentPage} of {totalPages}
                 </span>
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className="px-4 py-2 bg-gray-200 rounded-md disabled:opacity-50"
+                  className="px-4 py-2 bg-gray-200 rounded-md disabled:opacity-50 text-sm sm:text-base"
                 >
                   Next
                 </button>
@@ -235,7 +233,102 @@ const EditNews = () => {
       )}
 
       {activeTab === "EditNews" && (
-        <EditNewsModel editFormData={editFormData} />
+        <div>
+          <h1 className="text-2xl font-bold mb-6">Edit News</h1>
+          <form onSubmit={handleSaveEdit} className="space-y-4">
+            {/* Topic */}
+            <div>
+              <label htmlFor="topic" className="block text-sm font-medium text-gray-700">
+                Topic
+              </label>
+              <input
+                type="text"
+                id="topic"
+                name="topic"
+                value={editFormData.topic}
+                onChange={handleInputChange}
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                required
+              />
+            </div>
+
+            {/* Detail */}
+            <div>
+              <label htmlFor="detail" className="block text-sm font-medium text-gray-700">
+                Detail
+              </label>
+              <textarea
+                id="detail"
+                name="detail"
+                value={editFormData.detail}
+                onChange={handleInputChange}
+                rows="4"
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                required
+              ></textarea>
+            </div>
+
+            {/* Link */}
+            <div>
+              <label htmlFor="link" className="block text-sm font-medium text-gray-700">
+                Link
+              </label>
+              <input
+                type="text"
+                id="link"
+                name="link"
+                value={editFormData.link}
+                onChange={handleInputChange}
+                className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+              />
+            </div>
+
+            {/* Image */}
+            <div>
+              <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+                Image
+              </label>
+              <input
+                type="file"
+                id="image"
+                name="image"
+                onChange={handleInputChange}
+                className="mt-1 w-full"
+              />
+            </div>
+
+            {/* Files */}
+            <div>
+              <label htmlFor="files" className="block text-sm font-medium text-gray-700">
+                Additional Files
+              </label>
+              <input
+                type="file"
+                id="files"
+                name="files"
+                onChange={handleInputChange}
+                className="mt-1 w-full"
+              />
+            </div>
+
+            {/* Submit Button */}
+            <div className="flex justify-end space-x-4">
+              <button
+                type="button"
+                onClick={() => setActiveTab("Edit/Delete")}
+                className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 text-sm sm:text-base"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 text-sm sm:text-base"
+              >
+                Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
       )}
     </div>
   );

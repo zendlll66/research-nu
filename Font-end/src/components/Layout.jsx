@@ -30,7 +30,7 @@ const Layout = () => {
         <header className="absolute inset-x-0 top-0 z-50">
           <nav
             aria-label="Global"
-            className="flex items-center justify-between p-6 lg:px-8 text-white"
+            className="flex items-center justify-between p-6 lg:px-8 text-white "
           >
             <div className="flex lg:flex-1">
               <a href="/" className="-m-1.5 p-1.5">
@@ -85,8 +85,8 @@ const Layout = () => {
             onClose={setMobileMenuOpen}
             className="lg:hidden"
           >
-            <div className="fixed inset-0 z-50 bg-white" />
-            <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-orange-500 ">
+            <div className="fixed inset-0 z-50 bg-white opacity-50" />
+            <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm drop-shadow-xl ">
               <div className="flex items-center justify-between">
                 <a href="/" className="-m-1.5 p-1.5">
                   <img alt="Logo" src="/assets/logo.png" className="h-8 w-auto" />

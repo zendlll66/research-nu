@@ -35,9 +35,9 @@ const Statistics = () => {
 
         // 3. ดึงข้อมูลกิจกรรม (ข่าวและไฟล์)
         const activityRes = await axios.get(
-          "https://project-six-rouge.vercel.app/activity"
+          "https://project-six-rouge.vercel.app/activity/count"
         );
-        const activities = activityRes.data.data || [];
+        const activities = activityRes.data.total_activity;
 
         // 4. ดึงข้อมูลจำนวนผู้เยี่ยมชม
         const viewsRes = await axios.get(
@@ -48,7 +48,7 @@ const Statistics = () => {
         // อัปเดต state
         setTotalResearchers(researchers.length);
         setTotalPapers(papers.length);
-        setTotalActivities(activities.length);
+        setTotalActivities(activities);
         setTotalVisitors(visitors); // อัปเดตจำนวนผู้เยี่ยมชม
       } catch (error) {
         console.error("Error fetching statistics:", error);

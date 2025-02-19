@@ -307,9 +307,9 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
 
   return (
     <div className="p-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
         <button
-          className="px-4 py-2 bg-orange-600 text-white rounded-md"
+          className="px-4 py-2 bg-orange-600 text-white rounded-md w-full sm:w-auto"
           onClick={() => {
             setSelectedResearcher(null);
             localStorage.removeItem("selectedResearcher");
@@ -319,7 +319,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
           BACK
         </button>
         <button
-          className="px-4 py-2 bg-green-600 text-white rounded-md"
+          className="px-4 py-2 bg-green-600 text-white rounded-md w-full sm:w-auto"
           onClick={openAddModal}
         >
           + Add Research
@@ -333,7 +333,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
         ({selectedResearcher?.department || department})
       </h1>
 
-      <div className="relative mt-4 flex items-center space-x-4">
+      <div className="relative mt-4 flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
         <input
           type="text"
           placeholder="ค้นหาโปรเจกต์..."
@@ -345,7 +345,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
         <select
           value={selectedYear}
           onChange={(e) => setSelectedYear(e.target.value)}
-          className="px-4 py-2 border rounded-md"
+          className="w-full sm:w-auto px-4 py-2 border rounded-md"
         >
           <option value="">All Years</option>
           {[...new Set(cards.map((card) => card.year))].map((year) => (
@@ -359,7 +359,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
         <select
           value={selectedSource}
           onChange={(e) => setSelectedSource(e.target.value)}
-          className="px-4 py-2 border rounded-md"
+          className="w-full sm:w-auto px-4 py-2 border rounded-md"
         >
           <option value="">All Sources</option>
           {[...new Set(cards.map((card) => card.source))].map((source) => (
@@ -373,12 +373,11 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
       {isLoading ? (
         <div className="text-center mt-10">Loading...</div>
       ) : filteredCards.length > 0 ? (
-
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
           {filteredCards.map((card, index) => (
             <div
               key={`${card.id}-${index}`}
-              className="border p-4 rounded-lg shadow-lg bg-white flex flex-col justify-between h-40 relative cursor-pointer" // เพิ่ม cursor-pointer ตรงนี้
+              className="border h-full p-4 rounded-lg shadow-lg bg-white flex flex-col justify-between  relative cursor-pointer hover:shadow-xl transition-all"
               onClick={() => {
                 if (card.link_to_paper) {
                   window.open(card.link_to_paper, "_blank");
@@ -386,35 +385,39 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
                   alert("No link available for this paper.");
                 }
               }}
-              
             >
-              <h2 className="font-bold line-clamp-3 overflow-hidden text-ellipsis break-words">
-                {card.title}
-              </h2>
+              <div className="space-y-2 relative space-x-2 "> 
+                <h2 className="font-bold line-clamp-3 overflow-hidden text-ellipsis break-words ">
+                  {card.title}
+                </h2>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end">
+                  <div className="text-sm text-gray-500 mb-2 sm:mb-0">
+                    {card.year} | Source: {card.source}
+                  </div>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEdit(card);
+                      }}
+                      className="px-4 py-2 text-white bg-orange-500 rounded-md hover:bg-orange-600"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openDeleteModal(card, index);
+                      }}
+                      className="px-4 py-2 text-white bg-red-500 rounded-md hover:bg-red-600"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
 
-              <div className="text-sm text-gray-500">
-                {card.year} | Source: {card.source}
-              </div>
-              <div className="absolute bottom-2 right-2 flex space-x-2">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation(); // ป้องกันไม่ให้เหตุการณ์ส่งไปยัง card
-                    handleEdit(card); // ส่งข้อมูล card ที่ต้องการแก้ไข
-                  }}
-                  className="px-4 py-2 text-white bg-orange-500 rounded-md hover:bg-orange-600"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openDeleteModal(card, index);
-                  }}
-                  className="px-4 py-2 text-white bg-red-500 rounded-md hover:bg-red-600"
-                >
-                  Delete
-                </button>
-              </div>
+
             </div>
           ))}
         </div>
@@ -424,10 +427,10 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
         </div>
       )}
 
-      {/* Delete Comfirm Modal */}
+      {/* Delete Confirm Modal */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-md w-96">
+          <div className="bg-white p-6 rounded-md w-11/12 sm:w-96">
             <h2 className="text-xl font-bold mb-4">Confirm Delete</h2>
             <p>Are you sure you want to delete this project?</p>
             <div className="flex justify-end mt-6 space-x-4">
@@ -447,10 +450,11 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
           </div>
         </div>
       )}
+
       {/* Modal Edit*/}
       {isEditModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-md w-96">
+          <div className="bg-white p-6 rounded-md w-11/12 sm:w-96">
             <h2 className="text-xl font-bold mb-4">Edit Project</h2>
             <div className="space-y-4">
               <input
@@ -504,13 +508,13 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
             </div>
             <div className="flex justify-end mt-6 space-x-4">
               <button
-                onClick={() => setIsEditModalOpen(false)} // ปิด Modal
+                onClick={() => setIsEditModalOpen(false)}
                 className="px-4 py-2 bg-gray-500 text-white rounded-md"
               >
                 Cancel
               </button>
               <button
-                onClick={handleSaveEdit} // บันทึกการแก้ไข
+                onClick={handleSaveEdit}
                 className="px-4 py-2 bg-green-600 text-white rounded-md"
               >
                 Save
@@ -523,7 +527,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
       {/* Modal */}
       {isAddModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-md w-96">
+          <div className="bg-white p-6 rounded-md w-11/12 sm:w-96">
             <h2 className="text-xl font-bold mb-4">Add New Project</h2>
             <div className="space-y-4">
               <input

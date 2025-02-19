@@ -21,7 +21,7 @@ const Carousels = () => {
             image: JSON.parse(item.image || "[]"),
             files: JSON.parse(item.files || "[]"),
           }))
-          .reverse() // ✅ ทำให้ข่าวใหม่สุดอยู่ก่อน
+          
           .slice(0, 10); // ✅ จำกัดแค่ 10 ข่าวล่าสุด
 
         setNewsItems(data);

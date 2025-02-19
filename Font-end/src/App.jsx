@@ -18,6 +18,7 @@ import LineBroadcast from "./components/Dashboard/LineBroadcast";
 import EditRes from "./components/Dashboard/EditRes";
 import Register from "./components/Dashboard/Register";
 import MoreNews from "./page/MoreNews";
+import Manual from "./components/Dashboard/Manual";
 
 // เพิ่ม component สำหรับหน้าย่อยใน Dashboard
 
@@ -42,6 +43,8 @@ const router = createBrowserRouter([
           { path: "manageebook", element: <EditEbook/> }, // เส้นทางสำหรับ Edit Ebook
           { path: "linebroadcast", element: <LineBroadcast/> }, // เส้นทางสำหรับ Edit Ebook
           { path: "register", element: <Register/> }, 
+          { path: "manual", element:  <Manual/>},
+          
         ],
       },
       { path: "ebook", element: <Ebookpage /> },

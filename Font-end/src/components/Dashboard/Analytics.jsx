@@ -53,7 +53,7 @@ const Analytics = () => {
         const papers = scopusRes.data.data || [];
 
         const activityRes = await axios.get(
-          "https://project-six-rouge.vercel.app/activity"
+          "https://project-six-rouge.vercel.app/activity/count"
         );
         const activities = activityRes.data.data || [];
 

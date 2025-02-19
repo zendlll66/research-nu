@@ -7,7 +7,7 @@ import {
   FiChevronRight,
 } from "react-icons/fi";
 import { motion } from "framer-motion";
-import { MdOutlineBookmarkAdd } from "react-icons/md";
+import { MdOutlineBookmarkAdd,MdOutlineFiberManualRecord } from "react-icons/md";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { FaRegRegistered } from "react-icons/fa6";
 
@@ -86,13 +86,25 @@ const Sidebar = ({ selected, setSelected }) => {
         />
 
         <NavOption
-          Icon={FaRegRegistered }
+          Icon={FaRegRegistered}
           title="Register"
           selected={selected}
           setSelected={setSelected}
           open={open}
         />
+
+        <NavOption
+          Icon={MdOutlineFiberManualRecord}
+          title="Manual"
+          selected={selected}
+          setSelected={setSelected}
+          open={open}
+          
+        />
+
       </div>
+
+     
       <ToggleClose open={open} setOpen={setOpen} />
     </motion.nav>
   );
@@ -109,7 +121,7 @@ const NavOption = ({ Icon, title, selected, setSelected, open }) => {
     navigate(`/dashboard/${path}`);
   };
   const isActive = location.pathname === path;
- 
+
   return (
     <motion.button
       layout

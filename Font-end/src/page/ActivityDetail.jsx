@@ -66,7 +66,7 @@ const ActivityDetail = () => {
     const { image = [], files = [], topic, detail, time, admin, link } = activity;
 
     return (
-        <div className="max-w-4xl mx-auto p-6 mt-20 bg-white shadow-lg rounded-lg">
+        <div className="max-w-4xl mx-auto p-6 mb-20 mt-20 bg-white shadow-lg rounded-lg">
             {/* ✅ รูปภาพหลัก พร้อมให้กดดูขนาดเต็ม */}
             {image.length > 0 ? (
                 <div
@@ -115,17 +115,24 @@ const ActivityDetail = () => {
                 </div>
             )}
 
+
             {/* ✅ ไฟล์แนบ */}
             {files.length > 0 && (
-                <div className="mt-6">
-                    <h2 className="text-xl font-semibold text-gray-800">Attached Files</h2>
-                    <ul className="mt-3 space-y-2">
+                <div className="mt-6 ">
+                    <h2 className="text-xl font-semibold text-gray-800 ">Download Files</h2>
+                    <ul className="mt-3 space-y-2 overflow-x-hidden">
                         {files.map((file, index) => (
-                            <li key={index}>
-                                <a href={file} target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:underline">
+                            <li key={index} className="p-2 rounded-lg">
+                                <a
+                                    href={file}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-orange-500 hover:underline flex items-center break-words"
+                                >
                                     📄 {file.split("/").pop()}
                                 </a>
                             </li>
+
                         ))}
                     </ul>
                 </div>
@@ -134,7 +141,7 @@ const ActivityDetail = () => {
             {/* ✅ ลิงก์ที่เกี่ยวข้อง */}
             {link && (
                 <div className="mt-6">
-                    <h2 className="text-xl font-semibold text-gray-800">Download Files</h2>
+                    <h2 className="text-xl font-semibold text-gray-800">Download Link</h2>
                     <ul className="mt-3">
                         <li>
                             <a href={link} target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:underline">
@@ -151,7 +158,7 @@ const ActivityDetail = () => {
                     className="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-lg flex justify-center items-center z-50"
                     onClick={() => setSelectedImage(null)} // ✅ กดปิดเมื่อคลิกที่พื้นหลัง
                 >
-                    <div className="relative max-w-4xl w-full p-4"> 
+                    <div className="relative max-w-4xl w-full p-4">
                         <img src={selectedImage} alt="Full View" className="w-full h-auto rounded-lg shadow-lg" />
                     </div>
                 </div>

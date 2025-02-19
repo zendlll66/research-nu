@@ -13,7 +13,8 @@ const ResearcherDetails = () => {
     const [error, setError] = useState(null);
     const [selectedYear, setSelectedYear] = useState("");
     const [selectedSource, setSelectedSource] = useState("");
-
+    const [totalpaper, setTotalpaper] = useState(0);
+    const [validPapersCount, setValidPapersCount] = useState(0); // เพิ่ม state สำหรับ validPapersCount
     const baseImageUrl = "https://project-six-rouge.vercel.app";
 
     useEffect(() => {
@@ -41,6 +42,26 @@ const ResearcherDetails = () => {
         fetchResearcher();
     }, [faculty, id]);
 
+    const filteredPapers = researcherData.filter((paper) => {
+        return (
+            (selectedYear ? paper.year === parseInt(selectedYear) : true) &&
+            (selectedSource ? paper.source?.toLowerCase() === selectedSource : true)
+        );
+    });
+
+    // คำนวณ validPapersCount เมื่อ filteredPapers เปลี่ยนแปลง
+    useEffect(() => {
+        const count = filteredPapers.filter((paper) => {
+            const isNoResearch =
+                (paper.paper === "No Title" || !paper.paper) &&
+                (paper.source === "Unknown" || !paper.source) &&
+                (paper.cited === 0 || !paper.cited) &&
+                !paper.link_to_paper;
+            return !isNoResearch;
+        }).length;
+        setValidPapersCount(count);
+    }, [filteredPapers]);
+
     if (loading) {
         return (
             <div className="fixed inset-0 bg-white bg-opacity-10 backdrop-blur-sm flex justify-center items-center z-50">
@@ -62,13 +83,6 @@ const ResearcherDetails = () => {
     const years = [...new Set(researcherData.map((paper) => paper.year))];
     const sources = [...new Set(researcherData.map((paper) => paper.source?.toLowerCase() || ""))];
 
-    const filteredPapers = researcherData.filter((paper) => {
-        return (
-            (selectedYear ? paper.year === parseInt(selectedYear) : true) &&
-            (selectedSource ? paper.source?.toLowerCase() === selectedSource : true)
-        );
-    });
-
     return (
         <div>
             <div
@@ -83,7 +97,6 @@ const ResearcherDetails = () => {
                     className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-orange-500 to-white opacity-50 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
                 />
             </div>
-
 
             <div className="p-6 mt-20">
                 <div className="rounded-t-lg mb-3 grid place-items-center ">
@@ -157,60 +170,58 @@ const ResearcherDetails = () => {
 
                 {/* Show Total Papers */}
                 <div className="text-lg font-medium text-gray-700 mb-4">
-                    Total Papers: {filteredPapers.length}
+                    Total Papers: {validPapersCount} {/* แสดงจำนวน paper ที่ผ่านเงื่อนไข */}
                 </div>
 
                 {/* Display Filtered Papers */}
                 <div className="space-y-4">
-                    {filteredPapers.map((paper, index) => (
-                        <div
-                            key={index}
-                            className="bg-white border rounded-lg p-4 shadow hover:shadow-lg"
-                        >
-                            <h3 className="text-md font-semibold flex items-center gap-3 text-black">
-                                <FiBookOpen className="text-orange-500" />
-                                {paper.paper ?? "No Title"} {/* ✅ ถ้าเป็น null ให้เป็น "No Title" */}
-                            </h3>
-
-                            <p className="text-sm text-gray-600">
-                                <FiCalendar className="inline-block text-orange-500" /> {paper.year ?? "N/A"}
-                            </p>
-
-                            <p className="text-sm text-gray-600">
-                                <span className="font-bold">Source:</span> {paper.source ?? "Unknown"}
-                            </p>
-
-                            <p className="text-sm text-gray-600">
-                                <span className="font-bold">Citations:</span> {paper.cited ?? 0} {/* ✅ ถ้า null ให้เป็น 0 */}
-                            </p>
-
-                            <a
-                                href={paper.link_to_paper ?? "#"}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-orange-500 hover:underline"
+                    {filteredPapers
+                        .filter((paper) => {
+                            // กรอง paper ที่มีเงื่อนไขเป็น "0 ไม่มีงานวิจัย"
+                            const isNoResearch =
+                                (paper.paper === "No Title" || !paper.paper) &&
+                                (paper.source === "Unknown" || !paper.source) &&
+                                (paper.cited === 0 || !paper.cited) &&
+                                !paper.link_to_paper;
+                            return !isNoResearch;
+                        })
+                        .map((paper, index) => (
+                            <div
+                                key={index}
+                                className="bg-white border rounded-lg p-4 shadow hover:shadow-lg"
                             >
-                                View Paper
-                            </a>
-                        </div>
-                    ))}
+                                <h3 className="text-md font-semibold flex items-center gap-3 text-black">
+                                    <FiBookOpen className="text-orange-500" />
+                                    {paper.paper ?? "No Title"} {/* ✅ ถ้าเป็น null ให้เป็น "No Title" */}
+                                </h3>
 
-                <div
-                    aria-hidden="true"
-                    className="fixed  inset-x-0 top-[calc(100%-13rem)] z-[-10] transform-gpu overflow-hidden blur-xl sm:top-[calc(100%-30rem)]"
-                >
-                    <div
-                        style={{
-                            clipPath:
-                                'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-                        }}
-                        className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-orange-500 to-white opacity-50 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
-                    />
+                                <p className="text-sm text-gray-600">
+                                    <FiCalendar className="inline-block text-orange-500" />{" "}
+                                    {paper.year ?? "N/A"}
+                                </p>
+
+                                <p className="text-sm text-gray-600">
+                                    <span className="font-bold">Source:</span> {paper.source ?? "Unknown"}
+                                </p>
+
+                                <p className="text-sm text-gray-600">
+                                    <span className="font-bold">Citations:</span> {paper.cited ?? 0}{" "}
+                                    {/* ✅ ถ้า null ให้เป็น 0 */}
+                                </p>
+
+                                <a
+                                    href={paper.link_to_paper ?? "#"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-orange-500 hover:underline"
+                                >
+                                    View Paper
+                                </a>
+                            </div>
+                        ))}
                 </div>
             </div>
         </div>
-        </div >
-
     );
 };
 

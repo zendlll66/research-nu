@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"; 
+import { useState, useRef } from "react";
 import axios from "axios";
 import { GrAnnounce } from "react-icons/gr";
 import { IoIosRocket } from "react-icons/io";
@@ -76,22 +76,25 @@ const LineBroadcast = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-lg">
         <h2 className="text-2xl font-bold text-center mb-4 flex justify-center items-center gap-2 p-2 rounded-md">
           <GrAnnounce />
           LINE Broadcast
         </h2>
 
+        {/* Message Input */}
         <textarea
-          className="w-full p-2 border rounded-md mb-3"
+          className="w-full p-2 border rounded-md mb-3 resize-none"
           placeholder="Type a message..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          rows={4}
         />
 
+        {/* Link Input */}
         <div className="mb-3">
-          <label className="block font-semibold">Link (If there is)</label>
+          <label className="block font-semibold mb-1">Link (If there is)</label>
           <input
             type="text"
             className="w-full p-2 border rounded-md"
@@ -101,22 +104,35 @@ const LineBroadcast = () => {
           />
         </div>
 
+        {/* Image Upload */}
         <div className="mb-3">
-          <div className="flex items-center gap-2">
-            <label className="block font-semibold"> Upload photo (If there is)</label>
-          </div>
-          <input ref={inputFileRef} type="file" accept="image/*" onChange={handleImageUpload} />
-          {isUploading && <p className="text-yellow-500 text-sm mt-2"> Uploading...</p>}
+          <label className="block font-semibold mb-1">Upload photo (If there is)</label>
+          <input
+            ref={inputFileRef}
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="w-full p-2 border rounded-md"
+          />
+          {isUploading && <p className="text-yellow-500 text-sm mt-2">Uploading...</p>}
         </div>
 
+        {/* Image Preview */}
         {previewImage && (
           <div className="mb-3 flex justify-center">
-            <img src={previewImage} alt="Preview" className="w-40 h-40 object-cover rounded-md" />
+            <img
+              src={previewImage}
+              alt="Preview"
+              className="w-40 h-40 object-cover rounded-md"
+            />
           </div>
         )}
 
+        {/* Send Button */}
         <button
-          className={`w-full px-4 py-2 text-white font-bold rounded-md ${isUploading ? "bg-gray-400" : "bg-green-500 hover:bg-green-600"}`}
+          className={`w-full px-4 py-2 text-white font-bold rounded-md transition-all ${
+            isUploading ? "bg-gray-400 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"
+          }`}
           onClick={sendBroadcast}
           disabled={isUploading}
         >
