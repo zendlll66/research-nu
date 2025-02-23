@@ -264,7 +264,7 @@ const EditNews = () => {
                 onChange={handleInputChange}
                 rows="4"
                 className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-                required
+                
               ></textarea>
             </div>
 

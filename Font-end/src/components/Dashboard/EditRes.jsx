@@ -207,156 +207,158 @@ const EditRes = () => {
 
         return (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                <div className="bg-white p-6 rounded-md w-[570px] flex flex-col items-center">
-                    <h2 className="text-xl font-semibold mb-4 text-center">
-                        Add New Researcher
-                    </h2>
-                    <form onSubmit={handleSubmit} className="space-y-4 w-full">
-                        {/* ✅ พรีวิวรูปภาพ */}
-                        <div className="flex flex-col items-center">
-                            {formData.imagePreview ? (
-                                <img
-                                    src={formData.imagePreview}
-                                    alt="Preview"
-                                    className="h-40 w-40 object-cover rounded-full mb-4"
+                <div className="bg-white p-5 rounded-md w-full max-w-[570px] max-h-[90vh] overflow-y-auto flex flex-col items-center">
+                    <div className="w-full">
+                        <h2 className="text-xl font-semibold mb-4 text-center">
+                            Add New Researcher
+                        </h2>
+                        <form onSubmit={handleSubmit} className="space-y-4 w-full">
+                            {/* ✅ พรีวิวรูปภาพ */}
+                            <div className="flex flex-col items-center">
+                                {formData.imagePreview ? (
+                                    <img
+                                        src={formData.imagePreview}
+                                        alt="Preview"
+                                        className="h-40 w-40 object-cover rounded-full mb-4"
+                                    />
+                                ) : (
+                                    <div className="h-40 w-40 bg-gray-200 rounded-full flex items-center justify-center mb-4">
+                                        <span className="text-gray-500">No Image</span>
+                                    </div>
+                                )}
+                                <input
+                                    type="file"
+                                    name="image"
+                                    accept="image/*"
+                                    className="mt-2"
+                                    onChange={handleChange}
                                 />
-                            ) : (
-                                <div className="h-40 w-40 bg-gray-200 rounded-full flex items-center justify-center mb-4">
-                                    <span className="text-gray-500">No Image</span>
-                                </div>
-                            )}
-                            <input
-                                type="file"
-                                name="image"
-                                accept="image/*"
-                                className="mt-2"
-                                onChange={handleChange}
-                            />
-                        </div>
+                            </div>
 
-                        {/* 🔹 Row 1: Position (EN) + Name */}
-                        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                            <select
-                                name="position"
-                                value={formData.position}
-                                onChange={handleChange}
-                                className="w-full sm:w-1/3 p-2 border rounded"
-                            >
-                                <option value="">Position</option>
-                                <option value="PROF.">PROF.</option>
-                                <option value="PROF. DR.">PROF. DR.</option>
-                                <option value="ASSOC. PROF.">ASSOC. PROF.</option>
-                                <option value="ASSOC. PROF. DR.">ASSOC. PROF. DR.</option>
-                                <option value="ASST. PROF.">ASST. PROF.</option>
-                                <option value="ASST. PROF. DR.">ASST. PROF. DR.</option>
-                                <option value="DR.">DR.</option>
-                                <option value="LECTURER.">LECTURER.</option>
-                                <option value="Mr.">Mr.</option>
-                                <option value="Mrs.">Mrs.</option>
-                                <option value="Miss">Miss</option>
-                                <option value="Ms.">Ms.</option>
-                            </select>
-                            <input
-                                type="text"
-                                name="name"
-                                placeholder="Name"
-                                required
-                                className="w-full sm:w-2/3 p-2 border rounded"
-                                onChange={handleChange}
-                            />
-                        </div>
+                            {/* 🔹 Row 1: Position (EN) + Name */}
+                            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                                <select
+                                    name="position"
+                                    value={formData.position}
+                                    onChange={handleChange}
+                                    className="w-full sm:w-1/3 p-2 border rounded"
+                                >
+                                    <option value="">Position</option>
+                                    <option value="PROF.">PROF.</option>
+                                    <option value="PROF. DR.">PROF. DR.</option>
+                                    <option value="ASSOC. PROF.">ASSOC. PROF.</option>
+                                    <option value="ASSOC. PROF. DR.">ASSOC. PROF. DR.</option>
+                                    <option value="ASST. PROF.">ASST. PROF.</option>
+                                    <option value="ASST. PROF. DR.">ASST. PROF. DR.</option>
+                                    <option value="DR.">DR.</option>
+                                    <option value="LECTURER.">LECTURER.</option>
+                                    <option value="Mr.">Mr.</option>
+                                    <option value="Mrs.">Mrs.</option>
+                                    <option value="Miss">Miss</option>
+                                    <option value="Ms.">Ms.</option>
+                                </select>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    placeholder="Name"
+                                    required
+                                    className="w-full sm:w-2/3 p-2 border rounded"
+                                    onChange={handleChange}
+                                />
+                            </div>
 
-                        {/* 🔹 Row 2: Position (TH) + Name (TH) */}
-                        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                            <select
-                                name="position_thai"
-                                value={formData.position_thai}
-                                onChange={handleChange}
-                                className="w-full sm:w-1/3 p-2 border rounded"
-                            >
-                                <option value="">ตำแหน่ง</option>
-                                <option value="ศาสตราจารย์">ศาสตราจารย์</option>
-                                <option value="ศาสตราจารย์ ดร.">ศาสตราจารย์ ดร.</option>
-                                <option value="รองศาสตราจารย์">รองศาสตราจารย์</option>
-                                <option value="รองศาสตราจารย์ ดร.">รองศาสตราจารย์ ดร.</option>
-                                <option value="ผู้ช่วยศาสตราจารย์">ผู้ช่วยศาสตราจารย์</option>
-                                <option value="ผู้ช่วยศาสตราจารย์ ดร.">
-                                    ผู้ช่วยศาสตราจารย์ ดร.
-                                </option>
-                                <option value="อาจารย์">อาจารย์</option>
-                                <option value="นาย">นาย</option>
-                                <option value="นาง">นาง</option>
-                                <option value="นางสาว">นางสาว</option>
-                            </select>
+                            {/* 🔹 Row 2: Position (TH) + Name (TH) */}
+                            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                                <select
+                                    name="position_thai"
+                                    value={formData.position_thai}
+                                    onChange={handleChange}
+                                    className="w-full sm:w-1/3 p-2 border rounded"
+                                >
+                                    <option value="">ตำแหน่ง</option>
+                                    <option value="ศาสตราจารย์">ศาสตราจารย์</option>
+                                    <option value="ศาสตราจารย์ ดร.">ศาสตราจารย์ ดร.</option>
+                                    <option value="รองศาสตราจารย์">รองศาสตราจารย์</option>
+                                    <option value="รองศาสตราจารย์ ดร.">รองศาสตราจารย์ ดร.</option>
+                                    <option value="ผู้ช่วยศาสตราจารย์">ผู้ช่วยศาสตราจารย์</option>
+                                    <option value="ผู้ช่วยศาสตราจารย์ ดร.">
+                                        ผู้ช่วยศาสตราจารย์ ดร.
+                                    </option>
+                                    <option value="อาจารย์">อาจารย์</option>
+                                    <option value="นาย">นาย</option>
+                                    <option value="นาง">นาง</option>
+                                    <option value="นางสาว">นางสาว</option>
+                                </select>
+                                <input
+                                    type="text"
+                                    name="name_thai"
+                                    placeholder="ชื่อภาษาไทย"
+                                    className="w-full sm:w-2/3 p-2 border rounded"
+                                    onChange={handleChange}
+                                />
+                            </div>
                             <input
-                                type="text"
-                                name="name_thai"
-                                placeholder="ชื่อภาษาไทย"
-                                className="w-full sm:w-2/3 p-2 border rounded"
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <input
-                            type="email"
-                            name="contact"
-                            placeholder="Email"
-                            className="w-full p-2 border rounded"
-                            onChange={handleChange}
-                        />
-                        <input
-                            type="text"
-                            name="phone"
-                            placeholder="Phone"
-                            className="w-full p-2 border rounded"
-                            onChange={handleChange}
-                        />
-                        <input
-                            type="text"
-                            name="office"
-                            placeholder="Office"
-                            className="w-full p-2 border rounded"
-                            onChange={handleChange}
-                        />
-                        <label className="block text-sm font-medium text-gray-700">
-                            Department:
-                            <select
-                                disabled
-                                name="department"
-                                value={formData.department}
-                                onChange={handleChange}
-                                required
+                                type="email"
+                                name="contact"
+                                placeholder="Email"
                                 className="w-full p-2 border rounded"
-                            >
-                                <option value="">Select Department</option>
-                                <option value="Electrical and Computer Engineering">
-                                    Electrical and Computer Engineering
-                                </option>
-                                <option value="Mechanical Engineering">
-                                    Mechanical Engineering
-                                </option>
-                                <option value="Civil Engineering">Civil Engineering</option>
-                                <option value="Industrial Engineering">
-                                    Industrial Engineering
-                                </option>
-                                <option value="Others">Others</option>
-                            </select>
-                        </label>
-                        <div className="flex justify-end space-x-2">
-                            <button
-                                type="button"
-                                onClick={onClose}
-                                className="px-4 py-2 bg-gray-300 rounded"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                type="submit"
-                                className="px-4 py-2 bg-blue-500 text-white rounded"
-                            >
-                                Submit
-                            </button>
-                        </div>
-                    </form>
+                                onChange={handleChange}
+                            />
+                            <input
+                                type="text"
+                                name="phone"
+                                placeholder="Phone"
+                                className="w-full p-2 border rounded"
+                                onChange={handleChange}
+                            />
+                            <input
+                                type="text"
+                                name="office"
+                                placeholder="Office"
+                                className="w-full p-2 border rounded"
+                                onChange={handleChange}
+                            />
+                            <label className="block text-sm font-medium text-gray-700">
+                                Department:
+                                <select
+                                    disabled
+                                    name="department"
+                                    value={formData.department}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full p-2 border rounded"
+                                >
+                                    <option value="">Select Department</option>
+                                    <option value="Electrical and Computer Engineering">
+                                        Electrical and Computer Engineering
+                                    </option>
+                                    <option value="Mechanical Engineering">
+                                        Mechanical Engineering
+                                    </option>
+                                    <option value="Civil Engineering">Civil Engineering</option>
+                                    <option value="Industrial Engineering">
+                                        Industrial Engineering
+                                    </option>
+                                    <option value="Others">Others</option>
+                                </select>
+                            </label>
+                            <div className="flex justify-end space-x-2">
+                                <button
+                                    type="button"
+                                    onClick={onClose}
+                                    className="px-4 py-2 bg-gray-300 rounded"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 bg-orange-500 text-white rounded"
+                                >
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         );
@@ -887,8 +889,8 @@ const EditRes = () => {
                         {/* Dropdown Content */}
                         <div
                             className={`bg-gray-50 px-4 pb-4 space-y-2 overflow-hidden transition-all  duration-200 ease-in-out ${expandedFaculty === faculty.name
-                                    ? "max-h-[500px] opacity-100 overflow-y-auto"
-                                    : "max-h-0 opacity-0 pb-0"
+                                ? "max-h-[500px] opacity-100 overflow-y-auto"
+                                : "max-h-0 opacity-0 pb-0"
                                 }`}
                         >
                             {/* Add Researcher Button */}
