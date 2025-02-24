@@ -9,6 +9,14 @@ const Carousels = () => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
+  // ฟังก์ชันแปลงวันที่
+  const formatDate = (dateString) => {
+    if (!dateString) return "No Date";
+    const date = new Date(dateString);
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return date.toLocaleDateString("th-TH", options); // ใช้ 'th-TH' สำหรับภาษาไทย
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -21,7 +29,6 @@ const Carousels = () => {
             image: JSON.parse(item.image || "[]"),
             files: JSON.parse(item.files || "[]"),
           }))
-          
           .slice(0, 10); // ✅ จำกัดแค่ 10 ข่าวล่าสุด
 
         setNewsItems(data);
@@ -134,7 +141,7 @@ const Carousels = () => {
 
                   <div className="w-full px-2 space-y-2 text-black">
                     <span className="text-[12px] bg-orange-500 text-white w-fit px-2 py-1 rounded-md">
-                      {item.topic || "No Topic"}
+                      {formatDate(item.time) || "No Date"} {/* แสดงวันที่ที่แปลงแล้ว */}
                     </span>
                     <h1 className="font-bold text-orange-500">
                       {item.topic || "No Topic"}

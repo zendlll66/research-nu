@@ -144,7 +144,7 @@ const Analytics = () => {
   };
 
   return (
-    <div className="p-[80px]">
+    <div className="">
 
       <h1 className="mt-20 text-2xl font-semibold text-gray-800 mb-6">
         Research Paper Analytics
