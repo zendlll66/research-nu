@@ -159,36 +159,104 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
     const formattedDepartment = department;
     const apiUrl = `https://project-six-rouge.vercel.app/researcher/${formattedDepartment}/${researcherId}/new`;
 
+    // ตรวจสอบว่าข้อมูลครบถ้วนและถูกต้อง
+    if (
+      !newProject.paper ||
+      !newProject.year ||
+      !newProject.source ||
+      !newProject.cited ||
+      !newProject.link_to_paper
+    ) {
+      alert("กรุณากรอกข้อมูลให้ครบทุกช่อง");
+      return;
+    }
+
+    // ตรวจสอบว่า year เป็นตัวเลขและมีค่าถูกต้อง
+    const year = parseInt(newProject.year, 10);
+    if (isNaN(year) || year.toString().length !== 4) {
+      alert("ปี (Year) ต้องเป็นตัวเลข 4 หลักเท่านั้น (เช่น 2023)");
+      return;
+    }
+
+    // ตรวจสอบว่า cited เป็นตัวเลข
+    const cited = parseInt(newProject.cited, 10);
+    if (isNaN(cited)) {
+      alert("จำนวนการอ้างอิง (Cited) ต้องเป็นตัวเลขเท่านั้น");
+      return;
+    }
+
+    // สร้างข้อมูลที่จะส่งไปยัง API
+    const projectData = {
+      paper: newProject.paper,
+      year: year, // ใช้ค่า year ที่แปลงเป็นตัวเลขแล้ว
+      source: newProject.source,
+      cited: cited, // ใช้ค่า cited ที่แปลงเป็นตัวเลขแล้ว
+      link_to_paper: newProject.link_to_paper,
+    };
+
     try {
+      // ส่งข้อมูลไปยัง API เพื่อเพิ่มงานวิจัยใหม่
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // ✅ ส่ง token ใน header
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(newProject),
+        body: JSON.stringify(projectData), // ส่งข้อมูลที่ตรวจสอบแล้ว
       });
 
       if (response.ok) {
         const result = await response.json();
-        console.log("Project added:", result);
+        console.log("Research  added:", result);
 
-        setCards((prevCards) => [
-          ...prevCards,
-          {
-            id: result.research_id,
-            title: newProject.paper,
-            year: newProject.year,
-            source: newProject.source,
-            cited: newProject.cited,
-            link_to_paper: newProject.link_to_paper,
-          },
-        ]);
-        window.location.reload();
-        alert("Project added successfully!");
+        // ดึงข้อมูลใหม่จาก API หลังจากเพิ่มงานวิจัยสำเร็จ
+        const fetchResearcherData = async () => {
+          try {
+            const apiUrl = `https://project-six-rouge.vercel.app/researcher/${formattedDepartment}/${researcherId}`;
+            const response = await fetch(apiUrl, {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              if (data.status === "ok" && Array.isArray(data.data)) {
+                // อัพเดต State `cards` ด้วยข้อมูลใหม่
+                setCards(
+                  data.data
+                    .filter((item) => item.paper !== null)
+                    .map((item) => ({
+                      id: item.research_id || item.id,
+                      title: item.paper,
+                      year: item.year,
+                      source: item.source,
+                      cited: item.cited,
+                      link_to_paper: item.link_to_paper,
+                    }))
+                );
+              } else {
+                console.error("🚨 Unexpected data structure:", data);
+              }
+            } else {
+              console.error("🚨 Failed to fetch data:", response.statusText);
+            }
+          } catch (error) {
+            console.error("🚨 Error fetching researcher data:", error);
+          }
+        };
+
+        // ดึงข้อมูลใหม่
+        await fetchResearcherData();
+
+        // แจ้งเตือนและปิด Modal
+        alert("Research added successfully!");
+        closeAddModal();
       } else {
-        console.error("Failed to add project:", response.statusText);
-        alert("Failed to add project. Please try again.");
+        const errorData = await response.json();
+        console.error("Failed to add project:", errorData.message);
+        alert(`Failed to add project: ${errorData.message}`);
       }
     } catch (error) {
       console.error("Error adding project:", error);
@@ -204,7 +272,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
 
     if (!card.id) {
       console.error("🚨 Error: card.id is undefined!");
-      alert("Error: Cannot delete this project (ID is missing).");
+      alert("Error: Cannot delete this Research (ID is missing).");
       return;
     }
 
@@ -223,7 +291,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
       });
 
       if (response.ok) {
-        alert("Project deleted successfully!");
+        alert("Research deleted successfully!");
         setCards((prevCards) => prevCards.filter((_, i) => i !== index));
       } else {
         console.error("Failed to delete project:", response.statusText);
@@ -269,7 +337,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
       });
 
       const result = await response.json();
-      console.log("📌 Project updated:", result);
+      console.log("📌 Research  updated:", result);
 
       if (response.ok) {
         setCards((prevCards) =>
@@ -286,7 +354,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
               : card
           )
         );
-        alert("Project updated successfully!");
+        alert("Research updated successfully!");
         closeEditModal();
       } else {
         console.error("🚨 Failed to update project:", result.message);
@@ -386,7 +454,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
                 }
               }}
             >
-              <div className="space-y-2 relative space-x-2 "> 
+              <div className="space-y-2 relative space-x-2 ">
                 <h2 className="font-bold line-clamp-3 overflow-hidden text-ellipsis break-words ">
                   {card.title}
                 </h2>
@@ -436,7 +504,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
             <div className="flex justify-end mt-6 space-x-4">
               <button
                 onClick={closeEditModal}
-                className="px-4 py-2 bg-gray-500 text-white rounded-md"
+                className="px-4 py-2 z-50 bg-gray-500 text-white rounded-md"
               >
                 Cancel
               </button>
@@ -459,7 +527,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
             <div className="space-y-4">
               <input
                 type="text"
-                placeholder="Project Title"
+                placeholder="Research Title"
                 value={newProject.paper}
                 onChange={(e) =>
                   setNewProject({ ...newProject, paper: e.target.value })
@@ -531,8 +599,9 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
             <h2 className="text-xl font-bold mb-4">Add New Project</h2>
             <div className="space-y-4">
               <input
+                required
                 type="text"
-                placeholder="Project Title"
+                placeholder="Research Title"
                 value={newProject.paper}
                 onChange={(e) =>
                   setNewProject({ ...newProject, paper: e.target.value })
@@ -540,6 +609,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
                 className="w-full px-4 py-2 border rounded-md"
               />
               <input
+                required
                 type="text"
                 placeholder="Year"
                 value={newProject.year}
@@ -549,6 +619,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
                 className="w-full px-4 py-2 border rounded-md"
               />
               <input
+                required
                 type="text"
                 placeholder="Source"
                 value={newProject.source}
@@ -558,6 +629,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
                 className="w-full px-4 py-2 border rounded-md"
               />
               <input
+                required
                 type="text"
                 placeholder="Cited"
                 value={newProject.cited}
@@ -567,6 +639,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
                 className="w-full px-4 py-2 border rounded-md"
               />
               <input
+                required
                 type="text"
                 placeholder="Link to Paper"
                 value={newProject.link_to_paper}
@@ -588,7 +661,21 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
               </button>
               <button
                 onClick={handleAddProject}
-                className="px-4 py-2 bg-green-600 text-white rounded-md"
+                disabled={
+                  !newProject.paper ||
+                  !newProject.year ||
+                  !newProject.source ||
+                  !newProject.cited ||
+                  !newProject.link_to_paper
+                }
+                className={`px-4 py-2 rounded-md ${!newProject.paper ||
+                  !newProject.year ||
+                  !newProject.source ||
+                  !newProject.cited ||
+                  !newProject.link_to_paper
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-green-600 text-white"
+                  }`}
               >
                 Add
               </button>

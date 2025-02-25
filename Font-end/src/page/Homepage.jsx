@@ -56,17 +56,7 @@ export default function Example() {
               Dive into the world of innovative research. Explore and collaborate with us.
             </p>
 
-            <div className="mt-10 flex justify-center gap-6">
-              <a
-                href="#"
-                className="rounded-md bg-orange-500 px-5 py-3 text-sm font-semibold text-white shadow-lg hover:bg-orange-400 focus:outline-none transition-transform transform hover:scale-105"
-              >
-                Get started
-              </a>
-              <a href="#" className="text-sm font-semibold text-orange-600 hover:underline">
-                Learn more <span aria-hidden="true">→</span>
-              </a>
-            </div>
+            
           </div>
 
           {/* Carousel Section */}

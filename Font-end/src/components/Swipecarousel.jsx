@@ -74,18 +74,7 @@ const Carousel = () => {
                                                 >
                                                     {slide.description}
                                                 </motion.p>
-                                                <a href={slide.link} target="_blank" rel="noopener noreferrer">
-                                                    <motion.button
-                                                        className="px-6 py-3  bg-orange-500 hover:bg-orange-600 rounded-lg text-white font-semibold"
-                                                        whileHover={{ scale: 1.05 }}
-                                                        whileTap={{ scale: 0.95 }}
-                                                        initial={{ opacity: 0, y: 20 }}
-                                                        animate={{ opacity: 1, y: 0 }}
-                                                        transition={{ delay: 0.6, duration: 0.5 }}
-                                                    >
-                                                        {slide.label === "02" ? "QR Line" : "Learn More"}
-                                                    </motion.button>
-                                                </a>
+                                               
                                             </motion.div>
                                         )}
                                     </AnimatePresence>

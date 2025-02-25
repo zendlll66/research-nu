@@ -80,8 +80,10 @@ const Footercompo = () => {
                 <a href="https://www.facebook.com/eng.nu" className="hover:text-orange-400">Facebook</a>
               </div>
               <div className='flex items-center gap-2'>
-                <FiInstagram />
-                <a href="#" className="hover:text-orange-400 uppercase">instagram</a>
+                <img src="assets/QR.png" alt="" />
+              </div>
+              <div>
+
               </div>
             </div>
 

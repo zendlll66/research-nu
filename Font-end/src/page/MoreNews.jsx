@@ -9,6 +9,14 @@ const MoreNews = () => {
   const [totalPages, setTotalPages] = useState(1); // เก็บจำนวนหน้าจาก API
   const navigate = useNavigate();
 
+  // ฟังก์ชันแปลงวันที่
+  const formatDate = (dateString) => {
+    if (!dateString) return "No Date";
+    const date = new Date(dateString);
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return date.toLocaleDateString("th-TH", options); // ใช้ 'th-TH' สำหรับภาษาไทย
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -97,7 +105,7 @@ const MoreNews = () => {
                 </div>
                 <div className="p-4">
                   <span className="text-xs bg-orange-500 text-white px-2 py-1 rounded-md">
-                    {item.topic || "No Topic"}
+                    {formatDate(item.time) || "No Date"} {/* แสดงวันที่ที่แปลงแล้ว */}
                   </span>
                   <h2 className="mt-2 font-bold text-lg text-orange-500">{item.topic || "No Topic"}</h2>
                   
