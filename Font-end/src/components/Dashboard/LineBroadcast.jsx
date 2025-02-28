@@ -31,7 +31,7 @@ const LineBroadcast = () => {
       );
       setImage(response.data.secure_url);
     } catch {
-      alert(":x: อัปโหลดรูปไม่สำเร็จ");
+      alert("อัปโหลดรูปไม่สำเร็จ");
     } finally {
       setIsUploading(false);
     }
@@ -44,7 +44,7 @@ const LineBroadcast = () => {
     }
 
     if (isUploading) {
-      alert(":hourglass_flowing_sand: กรุณารอให้รูปอัปโหลดเสร็จก่อน...");
+      alert("กรุณารอให้รูปอัปโหลดเสร็จก่อน...");
       return;
     }
 
@@ -61,17 +61,17 @@ const LineBroadcast = () => {
 
       const data = await response.json();
       if (response.ok) {
-        alert(":white_check_mark: ส่งข้อความถึงทุกคนสำเร็จ!");
+        alert("ส่งข้อความถึงทุกคนสำเร็จ!");
         setMessage("");
         setImage(null);
         setPreviewImage(null);
         setLink("");
         if (inputFileRef.current) inputFileRef.current.value = "";
       } else {
-        alert(":x: เกิดข้อผิดพลาด: " + data.error);
+        alert("เกิดข้อผิดพลาด: " + data.error);
       }
     } catch {
-      alert(":x: ไม่สามารถส่งข้อความได้ กรุณาลองอีกครั้ง");
+      alert("ไม่สามารถส่งข้อความได้ กรุณาลองอีกครั้ง");
     }
   };
 

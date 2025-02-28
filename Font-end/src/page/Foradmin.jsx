@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Spline from '@splinetool/react-spline';
 
@@ -7,7 +7,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false); // สถานะการโหลด
   const [loginSuccess, setLoginSuccess] = useState(false); // สถานะล็อกอินสำเร็จ
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -40,7 +40,8 @@ const Login = () => {
 
       if (response.ok) {
         if (data.status === "ok") {
-          localStorage.setItem("token", data.token); // เก็บ Token หลังล็อกอิน
+          localStorage.setItem("token", data.token); // เก็บ Token
+          localStorage.setItem("adminName", data.name); // เก็บชื่อผู้ใช้
           setLoginSuccess(true); // ตั้งค่าการล็อกอินสำเร็จ
           setTimeout(() => {
             navigate("/"); // ไปหน้า Dashboard
