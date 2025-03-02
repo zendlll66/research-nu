@@ -12,7 +12,8 @@ import Analytics from '../components/Dashboard/Analytics';
 
 export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const adminName = localStorage.getItem("adminName");
+  const fname = localStorage.getItem("fname");
+  const lname = localStorage.getItem("lname");
   return (
     <div className="relative bg-white min-h-screen flex flex-col overflow-x-auto">
 
@@ -48,7 +49,7 @@ export default function Example() {
             <h1 className="text-6xl font-extrabold mt-20 tracking-tight text-orange-500 sm:text-7xl animate-fade-in">
               Faculty of Engineering Research Unit
             </h1>
-            <h1>Welcome, {adminName}!</h1>
+            
             <h2 className="text-4xl font-bold text-gray-700 mt-3 sm:text-5xl">
               Naresuan University
             </h2>

@@ -44,7 +44,6 @@ const router = createBrowserRouter([
           { path: "linebroadcast", element: <LineBroadcast/> }, // เส้นทางสำหรับ Edit Ebook
           { path: "register", element: <Register/> }, 
           { path: "manual", element:  <Manual/>},
-          
         ],
       },
       { path: "ebook", element: <Ebookpage /> },

@@ -41,7 +41,8 @@ const Login = () => {
       if (response.ok) {
         if (data.status === "ok") {
           localStorage.setItem("token", data.token); // เก็บ Token
-          localStorage.setItem("adminName", data.name); // เก็บชื่อผู้ใช้
+          localStorage.setItem("fname", data.fname); // เก็บชื่อผู้ใช้
+          localStorage.setItem("lname", data.lname); // เก็บชื่อผู้ใช้
           setLoginSuccess(true); // ตั้งค่าการล็อกอินสำเร็จ
           setTimeout(() => {
             navigate("/"); // ไปหน้า Dashboard

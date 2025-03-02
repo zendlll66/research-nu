@@ -164,7 +164,6 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
       !newProject.paper ||
       !newProject.year ||
       !newProject.source ||
-      !newProject.cited ||
       !newProject.link_to_paper
     ) {
       alert("กรุณากรอกข้อมูลให้ครบทุกช่อง");
@@ -178,36 +177,28 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
       return;
     }
 
-    // ตรวจสอบว่า cited เป็นตัวเลข
-    const cited = parseInt(newProject.cited, 10);
-    if (isNaN(cited)) {
-      alert("จำนวนการอ้างอิง (Cited) ต้องเป็นตัวเลขเท่านั้น");
-      return;
-    }
-
     // สร้างข้อมูลที่จะส่งไปยัง API
     const projectData = {
       paper: newProject.paper,
-      year: year, // ใช้ค่า year ที่แปลงเป็นตัวเลขแล้ว
+      year: year,
       source: newProject.source,
-      cited: cited, // ใช้ค่า cited ที่แปลงเป็นตัวเลขแล้ว
+      cited: null, // กำหนดค่า cited เป็น null
       link_to_paper: newProject.link_to_paper,
     };
 
     try {
-      // ส่งข้อมูลไปยัง API เพื่อเพิ่มงานวิจัยใหม่
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(projectData), // ส่งข้อมูลที่ตรวจสอบแล้ว
+        body: JSON.stringify(projectData),
       });
 
       if (response.ok) {
         const result = await response.json();
-        console.log("Research  added:", result);
+        console.log("Research added:", result);
 
         // ดึงข้อมูลใหม่จาก API หลังจากเพิ่มงานวิจัยสำเร็จ
         const fetchResearcherData = async () => {
@@ -223,7 +214,6 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
             if (response.ok) {
               const data = await response.json();
               if (data.status === "ok" && Array.isArray(data.data)) {
-                // อัพเดต State `cards` ด้วยข้อมูลใหม่
                 setCards(
                   data.data
                     .filter((item) => item.paper !== null)
@@ -247,10 +237,8 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
           }
         };
 
-        // ดึงข้อมูลใหม่
         await fetchResearcherData();
 
-        // แจ้งเตือนและปิด Modal
         alert("Research added successfully!");
         closeAddModal();
       } else {
@@ -326,18 +314,24 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
     const formattedDepartment = department;
     const apiUrl = `https://project-six-rouge.vercel.app/researcher/${formattedDepartment}/${researcherId}/${currentScopusId}/edit`;
 
+    // กำหนดค่า cited เป็น null โดยอัตโนมัติ
+    const updatedProject = {
+      ...newProject,
+      cited: null, // กำหนดค่า cited เป็น null
+    };
+
     try {
       const response = await fetch(apiUrl, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // ✅ ส่ง token ใน header
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(newProject),
+        body: JSON.stringify(updatedProject),
       });
 
       const result = await response.json();
-      console.log("📌 Research  updated:", result);
+      console.log("📌 Research updated:", result);
 
       if (response.ok) {
         setCards((prevCards) =>
@@ -345,11 +339,11 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
             card.id === currentScopusId
               ? {
                 ...card,
-                title: newProject.paper,
-                year: newProject.year,
-                source: newProject.source,
-                cited: newProject.cited,
-                link_to_paper: newProject.link_to_paper,
+                title: updatedProject.paper,
+                year: updatedProject.year,
+                source: updatedProject.source,
+                cited: updatedProject.cited, // ใช้ค่า cited ที่กำหนดเป็น null
+                link_to_paper: updatedProject.link_to_paper,
               }
               : card
           )
@@ -523,7 +517,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
       {isEditModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-md w-11/12 sm:w-96">
-            <h2 className="text-xl font-bold mb-4">Edit Project</h2>
+            <h2 className="text-xl font-bold mb-4">Edit Research</h2>
             <div className="space-y-4">
               <input
                 type="text"
@@ -552,15 +546,16 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
                 }
                 className="w-full px-4 py-2 border rounded-md"
               />
-              <input
-                type="text"
-                placeholder="Cited"
-                value={newProject.cited}
-                onChange={(e) =>
-                  setNewProject({ ...newProject, cited: e.target.value })
-                }
-                className="w-full px-4 py-2 border rounded-md"
-              />
+              {/* ซ่อน input ของฟิลด์ "Cited" */}
+              {/* <input
+          type="text"
+          placeholder="Cited"
+          value={newProject.cited}
+          onChange={(e) =>
+            setNewProject({ ...newProject, cited: e.target.value })
+          }
+          className="w-full px-4 py-2 border rounded-md"
+        /> */}
               <input
                 type="text"
                 placeholder="Link to Paper"
@@ -628,16 +623,17 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
                 }
                 className="w-full px-4 py-2 border rounded-md"
               />
-              <input
-                required
-                type="text"
-                placeholder="Cited"
-                value={newProject.cited}
-                onChange={(e) =>
-                  setNewProject({ ...newProject, cited: e.target.value })
-                }
-                className="w-full px-4 py-2 border rounded-md"
-              />
+              {/* ซ่อน input ของฟิลด์ "Cited" */}
+              {/* <input
+          required
+          type="text"
+          placeholder="Cited"
+          value={newProject.cited}
+          onChange={(e) =>
+            setNewProject({ ...newProject, cited: e.target.value })
+          }
+          className="w-full px-4 py-2 border rounded-md"
+        /> */}
               <input
                 required
                 type="text"
@@ -665,13 +661,11 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
                   !newProject.paper ||
                   !newProject.year ||
                   !newProject.source ||
-                  !newProject.cited ||
                   !newProject.link_to_paper
                 }
                 className={`px-4 py-2 rounded-md ${!newProject.paper ||
                   !newProject.year ||
                   !newProject.source ||
-                  !newProject.cited ||
                   !newProject.link_to_paper
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-green-600 text-white"
