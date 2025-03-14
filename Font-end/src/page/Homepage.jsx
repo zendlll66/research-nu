@@ -16,8 +16,12 @@ export default function Example() {
   const lname = localStorage.getItem("lname");
 
   useEffect(() => {
-    const data = JSON.stringify({ page: 'home' });
-    navigator.sendBeacon('https://project-six-rouge.vercel.app/home/track', data);
+    fetch("https://project-six-rouge.vercel.app/home/track", {
+      method: "GET", // ✅ ใช้ GET และเอา body ออก
+    })
+      .then(response => response.json())
+      .then(data => console.log("Tracking response:", data))
+      .catch(err => console.error("Tracking error:", err));
   }, []);
 
   return (
