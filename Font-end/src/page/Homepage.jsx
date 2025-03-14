@@ -16,13 +16,8 @@ export default function Example() {
   const lname = localStorage.getItem("lname");
 
   useEffect(() => {
-    fetch('https://project-six-rouge.vercel.app/home/track', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ page: 'home' }),
-    }).catch(err => console.error('Tracking error:', err));
+    const data = JSON.stringify({ page: 'home' });
+    navigator.sendBeacon('https://project-six-rouge.vercel.app/home/track', data);
   }, []);
 
   return (
