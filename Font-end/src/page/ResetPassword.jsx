@@ -10,7 +10,7 @@ const ResetPassword = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
-
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
     useEffect(() => {
         // ถ้าไม่มี Token ให้ redirect ออกไป
         if (!token) {
@@ -30,13 +30,13 @@ const ResetPassword = () => {
         }
 
         try {
-            const res = await axios.post("http://localhost:5000/api/reset-password", {
+            const res = await axios.post(`${backendUrl}/reset/reset-password`, {
                 token,
                 password,
             });
 
             setMessage(res.data.msg);
-            setTimeout(() => navigate("/login"), 3000); // Redirect ไปหน้า Login
+            setTimeout(() => navigate("/Foradmin"), 3000); // Redirect ไปหน้า Login
         } catch (err) {
             setError(err.response?.data?.msg || "Error resetting password");
         }
