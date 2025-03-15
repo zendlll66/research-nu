@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"; 
 import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -11,34 +11,51 @@ const ResetPassword = () => {
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
     useEffect(() => {
-        // ถ้าไม่มี Token ให้ redirect ออกไป
         if (!token) {
             setError("Invalid or expired token.");
             setTimeout(() => navigate("/Foradmin"), 3000);
         }
+        console.log("Token received from URL:", token);
     }, [token, navigate]);
 
     const handleSubmit = async (e) => {
+        console.log("Sending request with token:", token);
         e.preventDefault();
         setMessage("");
         setError("");
+
+        if (!password || !confirmPassword) {
+            setError("Please fill in all fields.");
+            return;
+        }
 
         if (password !== confirmPassword) {
             setError("Passwords do not match.");
             return;
         }
 
+        if (!token) {
+            setError("Invalid or expired token.");
+            return;
+        }
+
         try {
-            const res = await axios.post(`${backendUrl}/reset/reset-password`, {
-                token,
-                password,
-            });
+            const res = await axios.post(
+                `${backendUrl}/reset/reset-password`,
+                { token, password },
+                { headers: { "Content-Type": "application/json" } }
+            );
 
             setMessage(res.data.msg);
             setTimeout(() => navigate("/Foradmin"), 3000); // Redirect ไปหน้า Login
         } catch (err) {
-            setError(err.response?.data?.msg || "Error resetting password");
+            if (!err.response) {
+                setError("Network error. Please try again.");
+            } else {
+                setError(err.response.data?.msg || "Error resetting password");
+            }
         }
     };
 
@@ -48,7 +65,7 @@ const ResetPassword = () => {
                 <h2 className="text-2xl font-bold text-center mb-4 text-gray-700">Reset Password</h2>
                 {error && <p className="text-center text-red-500">{error}</p>}
                 {message && <p className="text-center text-green-500">{message}</p>}
-                
+
                 {!error && (
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <input

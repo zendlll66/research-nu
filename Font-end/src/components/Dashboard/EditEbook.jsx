@@ -6,7 +6,7 @@ const EditEbook = () => {
   const [message, setMessage] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   // ✅ ฟังก์ชันอัปเดตลิงก์ Ebook
   const handleSubmit = async () => {
     setMessage("");
@@ -17,7 +17,7 @@ const EditEbook = () => {
 
     try {
       const response = await fetch(
-        "https://project-six-rouge.vercel.app/ebook/edit/1",
+        `${backendUrl}/ebook/edit/1`,
         {
           method: "PUT",
           headers: {
