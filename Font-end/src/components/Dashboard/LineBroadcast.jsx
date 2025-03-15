@@ -11,7 +11,8 @@ const LineBroadcast = () => {
   const [isUploading, setIsUploading] = useState(false);
   const inputFileRef = useRef(null);
   const token = localStorage.getItem("token");
-
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -50,7 +51,7 @@ const LineBroadcast = () => {
 
     try {
       const payload = { message, image, link };
-      const response = await fetch("https://project-six-rouge.vercel.app/broadcast/send", {
+      const response = await fetch(`${backendUrl}/broadcast/send`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

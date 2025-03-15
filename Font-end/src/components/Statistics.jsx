@@ -8,7 +8,8 @@ const Statistics = () => {
   const [totalActivities, setTotalActivities] = useState(0);
   const [totalVisitors, setTotalVisitors] = useState(0);
   const [loading, setLoading] = useState(true);
-
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  
   // นับ Views จาก Local Storage
   const handlePageView = () => {
     const views = parseInt(localStorage.getItem("pageViews")) || 0;
@@ -23,25 +24,25 @@ const Statistics = () => {
       try {
         // 1. ดึงข้อมูลนักวิจัย
         const researcherRes = await axios.get(
-          "https://project-six-rouge.vercel.app/researcher"
+          `${backendUrl}/researcher`
         );
         const researchers = researcherRes.data.data || [];
 
         // 2. ดึงข้อมูล Scopus (Paper)
         const scopusRes = await axios.get(
-          "https://project-six-rouge.vercel.app/research/Totalpapers"
+          `${backendUrl}/research/Totalpapers`
         );
         const papers = scopusRes.data.data || [];
 
         // 3. ดึงข้อมูลกิจกรรม (ข่าวและไฟล์)
         const activityRes = await axios.get(
-          "https://project-six-rouge.vercel.app/activity/count"
+          `${backendUrl}/activity/count`
         );
         const activities = activityRes.data.total_activity;
 
         // 4. ดึงข้อมูลจำนวนผู้เยี่ยมชม
         const viewsRes = await axios.get(
-          "https://project-six-rouge.vercel.app/home/stats"
+          `${backendUrl}/home/stats`
         );
         const visitors = viewsRes.data.Visitors;
 

@@ -37,23 +37,23 @@ const Analytics = () => {
   const [totalActivities, setTotalActivities] = useState(0);
   const [totalViews, setTotalViews] = useState(0);
   const [loading, setLoading] = useState(true); // State สำหรับ Loading Indicator
-
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   useEffect(() => {
     const fetchStatistics = async () => {
       setLoading(true); // เริ่มโหลดข้อมูล
       try {
         const researcherRes = await axios.get(
-          "https://project-six-rouge.vercel.app/researcher"
+          `${backendUrl}/researcher`
         );
         const researchers = researcherRes.data.data || [];
 
         const scopusRes = await axios.get(
-          "https://project-six-rouge.vercel.app/research/Totalpapers"
+          `${backendUrl}/research/Totalpapers`
         );
         const papers = scopusRes.data.data || [];
 
         const activityRes = await axios.get(
-          "https://project-six-rouge.vercel.app/activity/count"
+          `${backendUrl}/activity/count`
         );
         const activities = activityRes.data.data || [];
 

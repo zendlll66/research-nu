@@ -15,6 +15,8 @@ const EditRes = () => {
     const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false); // ✅ Success Modal State
     const [isEditSuccessModalOpen, setIsEditSuccessModalOpen] = useState(false); // ✅ Success Modal สำหรับ Edit
     const token = localStorage.getItem("token");
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
     const [facultyData, setFacultyData] = useState([
         {
             name: "Electrical and Computer Engineering",
@@ -65,7 +67,7 @@ const EditRes = () => {
             const token = localStorage.getItem("token"); // ดึง token จาก localStorage
 
             const response = await fetch(
-                `https://project-six-rouge.vercel.app/researcher/${formattedDepartment}/new`,
+                `${backendUrl}/researcher/${formattedDepartment}/new`,
                 {
                     method: "POST",
                     headers: {
@@ -180,7 +182,7 @@ const EditRes = () => {
 
             try {
                 const response = await fetch(
-                    `https://project-six-rouge.vercel.app/researcher/${formData.department}/new`,
+                    `${backendUrl}/researcher/${formData.department}/new`,
                     {
                         method: "POST",
                         headers: {
@@ -574,7 +576,7 @@ const EditRes = () => {
     const fetchResearchers = async () => {
         try {
             const response = await fetch(
-                "https://project-six-rouge.vercel.app/researcher"
+                `${backendUrl}/researcher`
             );
             const data = await response.json();
 
@@ -627,7 +629,7 @@ const EditRes = () => {
     const fetchData = async () => {
         try {
             const response = await fetch(
-                "https://project-six-rouge.vercel.app/researcher"
+                `${backendUrl}/researcher`
             );
             const data = await response.json();
 
@@ -671,7 +673,7 @@ const EditRes = () => {
     const handleEditSubmit = async (updatedData) => {
         const formattedDepartment = updatedData.department;
         const researcherId = updatedData.id;
-        const updateUrl = `https://project-six-rouge.vercel.app/researcher/${formattedDepartment}/${researcherId}/update`;
+        const updateUrl = `${backendUrl}/researcher/${formattedDepartment}/${researcherId}/update`;
 
         const token = localStorage.getItem("token"); // ดึง token จาก localStorage
 
@@ -729,7 +731,7 @@ const EditRes = () => {
         const department = facultyName;
         const researcherId = member.id;
 
-        const deleteUrl = `https://project-six-rouge.vercel.app/researcher/${department}/${researcherId}`;
+        const deleteUrl = `${backendUrl}/researcher/${department}/${researcherId}`;
         if (isProcessing) return; // ✅ ป้องกันการกดซ้ำ
 
         setIsProcessing(true); // ✅ ปิดปุ่มชั่วคราว
@@ -798,7 +800,7 @@ const EditRes = () => {
         const fetchData = async () => {
             try {
                 const response = await fetch(
-                    "https://project-six-rouge.vercel.app/researcher"
+                    `${backendUrl}/researcher`
                 );
                 const data = await response.json();
 

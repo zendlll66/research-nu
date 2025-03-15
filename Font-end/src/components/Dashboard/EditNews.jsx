@@ -10,6 +10,7 @@ const EditNews = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const token = localStorage.getItem("token");
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [editFormData, setEditFormData] = useState({
     topic: "",
     detail: "",
@@ -31,7 +32,7 @@ const EditNews = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `https://project-six-rouge.vercel.app/activity?page=${page}`
+        `${backendUrl}/activity?page=${page}`
       );
       setNewsList(response.data.data || []);
       setTotalPages(response.data.total_pages || 1);
@@ -51,7 +52,7 @@ const EditNews = () => {
   const handleDelete = async (activityId) => {
     if (!window.confirm("คุณต้องการลบข่าวนี้ใช่หรือไม่?")) return;
     try {
-      await axios.delete(`https://project-six-rouge.vercel.app/activity/${activityId}`, {
+      await axios.delete(`${backendUrl}/activity/${activityId}`, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
@@ -105,7 +106,7 @@ const EditNews = () => {
 
     try {
       await axios.put(
-        `https://project-six-rouge.vercel.app/activity/${selectedNews.id}/edit`,
+        `${backendUrl}/activity/${selectedNews.id}/edit`,
         data,
         {
           headers: {

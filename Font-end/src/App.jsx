@@ -19,6 +19,8 @@ import EditRes from "./components/Dashboard/EditRes";
 import Register from "./components/Dashboard/Register";
 import MoreNews from "./page/MoreNews";
 import Manual from "./components/Dashboard/Manual";
+import RequestReset from "./page/RequestReset";
+import ResetPassword from "./page/ResetPassword";
 
 // เพิ่ม component สำหรับหน้าย่อยใน Dashboard
 
@@ -51,7 +53,8 @@ const router = createBrowserRouter([
       { path: "research", element: <Research /> },
       { path: "/researcher/:faculty/:id", element: <ResearcherDetails /> },
       { path: "/activity/:id", element: <ActivityDetail /> },
-
+      { path: "/request-reset", element:<RequestReset/>}, // เส้นทางสำหรับ RequestReset
+      { path: "/reset-password", element:<ResetPassword/>},
       {
         path: "foradmin",
         element: <Foradmin />,

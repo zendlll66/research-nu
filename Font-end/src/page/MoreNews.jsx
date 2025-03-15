@@ -8,7 +8,7 @@ const MoreNews = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1); // เก็บจำนวนหน้าจาก API
   const navigate = useNavigate();
-
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   // ฟังก์ชันแปลงวันที่
   const formatDate = (dateString) => {
     if (!dateString) return "No Date";
@@ -22,7 +22,7 @@ const MoreNews = () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `https://project-six-rouge.vercel.app/activity?page=${currentPage}`
+          `${backendUrl}/activity?page=${currentPage}`
         );
 
         const data = response.data.data.map((item) => ({

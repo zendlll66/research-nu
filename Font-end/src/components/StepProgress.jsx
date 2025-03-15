@@ -4,7 +4,7 @@ import EditNews from "./Dashboard/EditNews";
 
 const StepProgress = () => {
   const fileInputRef = useRef(null); // ✅ ใช้ useRef เพื่อเข้าถึง input file
-
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const initialFormState = {
     topic: "",
     detail: "",
@@ -39,7 +39,7 @@ const StepProgress = () => {
       setIsLoading(true);
       setError("");
       try {
-        const response = await axios.get("https://project-six-rouge.vercel.app/activity");
+        const response = await axios.get(`${backendUrl}/activity`);
         setNewsList(response.data.data || []);
       } catch (error) {
         console.error("Error fetching news:", error);
@@ -76,9 +76,9 @@ const StepProgress = () => {
       // ✅ ดึง Token จาก localStorage
       const token = localStorage.getItem("token");
 
-      const newsUrl = `https://research-nu-nine.vercel.app/activity/${newsId}`;
+      const newsUrl = `${backendUrl}/activity/${newsId}`;
       const response = await axios.post(
-        "https://project-six-rouge.vercel.app/broadcast/send",
+        `${backendUrl}/broadcast/send`,
         {
           message: `📢New Topic: ${formData.topic}\n🔗 Read more: ${newsUrl}`,
         },
@@ -130,7 +130,7 @@ const StepProgress = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.post(
-        "https://project-six-rouge.vercel.app/activity/new",
+        `${backendUrl}/activity/new`,
         data,
         {
           headers: {

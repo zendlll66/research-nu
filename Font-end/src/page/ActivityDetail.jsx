@@ -9,8 +9,7 @@ const ActivityDetail = () => {
     const [activity, setActivity] = useState(location.state?.activity || null);
     const [isLoading, setIsLoading] = useState(!activity);
     const [selectedImage, setSelectedImage] = useState(null); // ✅ เก็บรูปที่ถูกเลือก
-    const baseUrl = "https://project-six-rouge.vercel.app";
-
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
     const formatDate = (isoString) => {
         if (!isoString) return "No Date";
         const date = new Date(isoString);
@@ -25,7 +24,7 @@ const ActivityDetail = () => {
         if (!activity) {
             const fetchActivity = async () => {
                 try {
-                    const response = await axios.get(`${baseUrl}/activity/${id}`);
+                    const response = await axios.get(`${backendUrl}/activity/${id}`);
                     const data = response.data.data || {};
                     setActivity({
                         ...data,

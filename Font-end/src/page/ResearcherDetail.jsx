@@ -15,13 +15,14 @@ const ResearcherDetails = () => {
     const [selectedSource, setSelectedSource] = useState("");
     const [totalpaper, setTotalpaper] = useState(0);
     const [validPapersCount, setValidPapersCount] = useState(0); // เพิ่ม state สำหรับ validPapersCount
-    const baseImageUrl = "https://project-six-rouge.vercel.app";
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+    
 
     useEffect(() => {
         const fetchResearcher = async () => {
             try {
                 const response = await fetch(
-                    `https://project-six-rouge.vercel.app/researcher/${encodeURIComponent(faculty)}/${id}`
+                    `${backendUrl}/researcher/${encodeURIComponent(faculty)}/${id}`
                 );
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -204,10 +205,10 @@ const ResearcherDetails = () => {
                                     <span className="font-bold">Source:</span> {paper.source ?? "Unknown"}
                                 </p>
 
-                                <p className="text-sm text-gray-600">
+                                {/* <p className="text-sm text-gray-600">
                                     <span className="font-bold">Citations:</span> {paper.cited ?? 0}{" "}
-                                    {/* ✅ ถ้า null ให้เป็น 0 */}
-                                </p>
+                                   
+                                </p> */}
 
                                 <a
                                     href={paper.link_to_paper ?? "#"}

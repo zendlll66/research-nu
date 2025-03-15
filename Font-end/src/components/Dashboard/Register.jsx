@@ -14,7 +14,7 @@ const Register = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
-
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   // Retrieve token from localStorage (if available)
   const token = localStorage.getItem("token");
 
@@ -36,7 +36,7 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("https://project-six-rouge.vercel.app/admin/register", {
+      const response = await fetch(`${backendUrl}/admin/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

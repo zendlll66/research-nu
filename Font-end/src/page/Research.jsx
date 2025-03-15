@@ -9,10 +9,11 @@ const Research = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [viewMode, setViewMode] = useState(
     localStorage.getItem("viewMode") || "withImage"
   );
-  const baseImageUrl = "https://project-six-rouge.vercel.app";
+ 
 
   const faculties = [
     "Industrial Engineering",
@@ -30,7 +31,7 @@ const Research = () => {
       try {
         const encodedFaculty = encodeURIComponent(selectedFaculty);
         const response = await fetch(
-          `https://project-six-rouge.vercel.app/researcher/${encodedFaculty}`
+          `${backendUrl}/researcher/${encodedFaculty}`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

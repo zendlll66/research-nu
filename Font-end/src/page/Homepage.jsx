@@ -14,16 +14,17 @@ export default function Example() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const fname = localStorage.getItem("fname");
   const lname = localStorage.getItem("lname");
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
-    fetch("https://project-six-rouge.vercel.app/home/track", {
+    fetch(`${backendUrl}/home/track`, {
       method: "GET", // ✅ ใช้ GET และเอา body ออก
     })
       .then(response => response.json())
       .then(data => console.log("Tracking response:", data))
       .catch(err => console.error("Tracking error:", err));
   }, []);
-
+2
   return (
     <div className="relative bg-white min-h-screen flex flex-col overflow-x-auto">
       {/* Background สีส้มที่อยู่ด้านหลังสุด */}

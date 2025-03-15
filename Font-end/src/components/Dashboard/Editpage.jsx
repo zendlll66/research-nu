@@ -12,6 +12,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
   const [currentScopusId, setCurrentScopusId] = useState(null);
   const [selectedSource, setSelectedSource] = useState(""); // ✅ ฟิลเตอร์ Source ที่เพิ่มใหม่
   const token = localStorage.getItem("token");
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   // ✅ เก็บ researcherId, name, department ใน localStorage
   const [selectedResearcher, setSelectedResearcher] = useState(() => {
@@ -52,7 +53,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
           return;
         }
 
-        const apiUrl = `https://project-six-rouge.vercel.app/researcher/${researcherDepartment}/${researcher}`;
+        const apiUrl = `${backendUrl}/researcher/${researcherDepartment}/${researcher}`;
         console.log("📌 Fetching researcher data from:", apiUrl);
 
         const response = await fetch(apiUrl, {
@@ -157,7 +158,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
   // ส่งข้อมูลไปยัง API เพื่อเพิ่มโครงการใหม่
   const handleAddProject = async () => {
     const formattedDepartment = department;
-    const apiUrl = `https://project-six-rouge.vercel.app/researcher/${formattedDepartment}/${researcherId}/new`;
+    const apiUrl = `${backendUrl}/researcher/${formattedDepartment}/${researcherId}/new`;
 
     // ตรวจสอบว่าข้อมูลครบถ้วนและถูกต้อง
     if (
@@ -203,7 +204,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
         // ดึงข้อมูลใหม่จาก API หลังจากเพิ่มงานวิจัยสำเร็จ
         const fetchResearcherData = async () => {
           try {
-            const apiUrl = `https://project-six-rouge.vercel.app/researcher/${formattedDepartment}/${researcherId}`;
+            const apiUrl = `${backendUrl}/researcher/${formattedDepartment}/${researcherId}`;
             const response = await fetch(apiUrl, {
               headers: {
                 "Content-Type": "application/json",
@@ -265,7 +266,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
     }
 
     const formattedDepartment = department;
-    const apiUrl = `https://project-six-rouge.vercel.app/researcher/${formattedDepartment}/${researcherId}/${card.id}`;
+    const apiUrl = `${backendUrl}/researcher/${formattedDepartment}/${researcherId}/${card.id}`;
 
     console.log("📌 DELETE Request to:", apiUrl); // ✅ เช็ก URL ว่าถูกต้องไหม
 
@@ -312,7 +313,7 @@ const Editpage = ({ setSelectedMember, researcherId, name, department }) => {
 
   const handleSaveEdit = async () => {
     const formattedDepartment = department;
-    const apiUrl = `https://project-six-rouge.vercel.app/researcher/${formattedDepartment}/${researcherId}/${currentScopusId}/edit`;
+    const apiUrl = `${backendUrl}/researcher/${formattedDepartment}/${researcherId}/${currentScopusId}/edit`;
 
     // กำหนดค่า cited เป็น null โดยอัตโนมัติ
     const updatedProject = {

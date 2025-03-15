@@ -4,13 +4,15 @@ const Ebookpage = () => {
   const [ebookLink, setEbookLink] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  
   useEffect(() => {
     setLoading(true);
     setError(null);
     // โหลดข้อมูลจาก API
     const fetchEbookLink = async () => {
       try {
-        const response = await fetch('https://project-six-rouge.vercel.app/ebook');
+        const response = await fetch(`${backendUrl}/ebook`);
         const data = await response.json();
         if (data?.data && data.data.length > 0) {
           setEbookLink(data.data[0].link_to_ebook);

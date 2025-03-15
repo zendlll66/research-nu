@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Spline from '@splinetool/react-spline';
-
+import { Link } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false); // สถานะการโหลด
   const [loginSuccess, setLoginSuccess] = useState(false); // สถานะล็อกอินสำเร็จ
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -71,8 +73,8 @@ const Login = () => {
       <div className='bg-white py-[72px] px-[48px] h-[450px] w-[500px] rounded-[24px] absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] shadow-2xl'>
         {isLoading ? (
           <div className="flex justify-center items-center h-full">
-            <div className="animate-spin rounded-full border-t-4 border-b-4 border-[#246BFD] w-16 h-16"></div>
-            <p className="ml-4 text-[#246BFD]">Loading...</p>
+            <div className="animate-spin rounded-full border-t-4 border-b-4 border-orange-500 w-16 h-16"></div>
+            <p className="ml-4 text-orange-500">Loading...</p>
           </div>
         ) : loginSuccess ? (
           <div className="text-center">
@@ -83,7 +85,7 @@ const Login = () => {
             <h1 className="font-bold text-[24px]">Welcome back</h1>
             <div>
               <input
-                className="hover:border-[#246BFD] focus:border-[#246BFD] border-2 h-[40px] w-[300px] p-3 outline-none rounded-[12px]"
+                className="hover:border-orange-500 focus:border-orange-500 border-2 h-[40px] w-[300px] p-3 outline-none rounded-[12px]"
                 type="email"
                 id="email"
                 name="email"
@@ -93,10 +95,10 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div>
+            <div className="relative">
               <input
-                className="hover:border-[#246BFD] focus:border-[#246BFD] border-2 h-[40px] w-[300px] p-3 outline-none rounded-[12px]"
-                type="password"
+                className="hover:border-orange-500 focus:border-orange-500 border-2 h-[40px] w-[300px] p-3 outline-none rounded-[12px]"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 name="password"
                 required
@@ -104,14 +106,26 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <button
+                type="button"
+                className="absolute right-2 top-[50%] translate-y-[-50%] text-orange-500"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEye/> : <FaEyeSlash/>}
+              </button>
             </div>
             <div className="">
               <button
                 type="submit"
-                className="hover:bg-[#246BFD] bg-[#E5E5E5] w-[300px] h-[40px] rounded-[12px] text-white"
+                className="hover:bg-orange-500 bg-[#E5E5E5] w-[300px] h-[40px] rounded-[12px] text-white"
               >
                 SIGN IN
               </button>
+              <div className="text-center mt-2">
+                <Link to="/request-reset" className="text-orange-500 hover:underline">
+                  Forgot Password?
+                </Link>
+              </div>
             </div>
           </form>
         )}

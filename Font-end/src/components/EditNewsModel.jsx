@@ -8,6 +8,8 @@ const EditNewsModel = ({ editFormData, setEditFormData, setActiveTab, selectedNe
         e.preventDefault();
         const token = localStorage.getItem("token");
         const data = new FormData();
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        
         data.append("topic", editFormData.topic);
         data.append("detail", editFormData.detail);
         data.append("link", editFormData.link); // เพิ่ม link
@@ -20,7 +22,7 @@ const EditNewsModel = ({ editFormData, setEditFormData, setActiveTab, selectedNe
 
         try {
             await axios.put(
-                `https://project-six-rouge.vercel.app/activity/${selectedNews.id}/edit`,
+                `${backendUrl}/activity/${selectedNews.id}/edit`,
                 data, {
                 headers: {
                     "Content-Type": "multipart/form-data",

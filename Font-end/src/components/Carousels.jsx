@@ -8,7 +8,7 @@ const Carousels = () => {
   const [newsItems, setNewsItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   // ฟังก์ชันแปลงวันที่
   const formatDate = (dateString) => {
     if (!dateString) return "No Date";
@@ -21,7 +21,7 @@ const Carousels = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://project-six-rouge.vercel.app/activity"
+          `${backendUrl}/activity`
         );
         const data = response.data.data
           .map((item) => ({
