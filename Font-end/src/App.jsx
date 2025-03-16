@@ -54,7 +54,7 @@ const router = createBrowserRouter([
       { path: "/researcher/:faculty/:id", element: <ResearcherDetails /> },
       { path: "/activity/:id", element: <ActivityDetail /> },
       { path: "/request-reset", element:<RequestReset/>}, // เส้นทางสำหรับ RequestReset
-      { path: "/reset-password/reset-password", element:<ResetPassword/>},
+      { path: "/reset-password", element:<ResetPassword/>},
       {
         path: "foradmin",
         element: <Foradmin />,
