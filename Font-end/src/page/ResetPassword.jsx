@@ -4,7 +4,7 @@ import axios from "axios";
 
 const ResetPassword = () => {
     const [searchParams] = useSearchParams();
-    const token = searchParams.get("token"); // ดึง Token จาก URL
+    const reset_token = searchParams.get("token"); // ดึง Token จาก URL
     const navigate = useNavigate();
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -13,15 +13,15 @@ const ResetPassword = () => {
     const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
     useEffect(() => {
-        if (!token) {
+        if (!reset_token) {
             setError("Invalid or expired token.");
             setTimeout(() => navigate("/Foradmin"), 3000);
         }
-        console.log("Token received from URL:", token);
-    }, [token, navigate]);
+        console.log("Token received from URL:", reset_token);
+    }, [reset_token, navigate]);
 
     const handleSubmit = async (e) => {
-        console.log("Sending request with token:", token);
+        console.log("Sending request with token:", reset_token);
         e.preventDefault();
         setMessage("");
         setError("");
@@ -36,7 +36,7 @@ const ResetPassword = () => {
             return;
         }
 
-        if (!token) {
+        if (!reset_token) {
             setError("Invalid or expired token.");
             return;
         }
@@ -44,7 +44,7 @@ const ResetPassword = () => {
         try {
             const res = await axios.post(
                 `${backendUrl}/reset/reset-password`,
-                { token, password },
+                { reset_token, password },
                 { headers: { "Content-Type": "application/json" } }
             );
 
