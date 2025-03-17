@@ -75,12 +75,19 @@ const Footercompo = () => {
           <div className="flex flex-col  p-4 ">
             <h1 className='text-center mb-2 text-orange-400 font-bold uppercase'>Social</h1>
             <div className='flex flex-col gap-2 justify-center items-center'>
+              
+              <div className='flex items-center gap-2'>
+                <img src="assets/QR.png" alt="" />
+              </div>
+              <span>
+                QR code Line
+              </span>
+              <div className='flex items-center gap-2 '>
+                
+              </div>
               <div className='flex  items-center gap-2 '>
                 <FaFacebookSquare />
                 <a href="https://www.facebook.com/eng.nu" className="hover:text-orange-400">Facebook</a>
-              </div>
-              <div className='flex items-center gap-2'>
-                <img src="assets/QR.png" alt="" />
               </div>
               <div>
 
