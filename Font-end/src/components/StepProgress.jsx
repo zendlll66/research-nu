@@ -116,13 +116,12 @@ const StepProgress = () => {
     data.append("time", cleanData.time);
     data.append("link", cleanData.link);
 
-    // ✅ เพิ่ม images เข้า FormData
     if (cleanData.images.length > 0) {
       cleanData.images.forEach((image) => {
-        if (image) data.append("images", image);
+        if (image) data.append("image", image);
       });
     } else {
-      data.append("images", "");
+      data.append("image", ""); // ✅ ป้องกัน undefined
     }
 
     // ✅ เพิ่ม files เข้า FormData
@@ -134,9 +133,10 @@ const StepProgress = () => {
       data.append("files", "");
     }
 
-    console.log("📌 FormData Entries:", [...data.entries()]);
+    console.log("📌 Cleaned FormData:", [...data.entries()]);
 
     try {
+      // ✅ ดึง Token จาก localStorage
       const token = localStorage.getItem("token");
       const response = await axios.post(
         `${backendUrl}/activity/new`,
@@ -144,7 +144,7 @@ const StepProgress = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, // ✅ เพิ่ม Token ใน Header
           },
         }
       );
@@ -152,7 +152,15 @@ const StepProgress = () => {
       console.log("✅ Success:", response.data);
       alert("News posted successfully!");
 
+      const newsId = response.data.activityId || null;
+      if (newsId) {
+        await sendLineBroadcast(newsId);
+      }
+
+      setNewsList([...newsList, response.data]);
+
       setFormData(initialFormState);
+
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -163,7 +171,6 @@ const StepProgress = () => {
       setIsSubmitting(false);
     }
   };
-
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-md">
