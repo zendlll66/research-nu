@@ -105,6 +105,7 @@ const StepProgress = () => {
       admin: formData.admin || "",
       link: formData.link || "",
       images: Array.isArray(formData.images) ? formData.images : [],
+      files: Array.isArray(formData.files) ? formData.files : [], // ✅ เพิ่มไฟล์
       time: new Date().toISOString(),
     };
 
@@ -115,27 +116,35 @@ const StepProgress = () => {
     data.append("time", cleanData.time);
     data.append("link", cleanData.link);
 
+    // ✅ เพิ่ม images เข้า FormData
     if (cleanData.images.length > 0) {
       cleanData.images.forEach((image) => {
-        if (image) data.append("image", image);
+        if (image) data.append("images", image);
       });
     } else {
-      data.append("image", ""); // ✅ ป้องกัน undefined
+      data.append("images", "");
     }
 
-    console.log("📌 Cleaned FormData:", [...data.entries()]);
+    // ✅ เพิ่ม files เข้า FormData
+    if (cleanData.files.length > 0) {
+      cleanData.files.forEach((file) => {
+        if (file) data.append("files", file);
+      });
+    } else {
+      data.append("files", "");
+    }
+
+    console.log("📌 FormData Entries:", [...data.entries()]);
 
     try {
-      // ✅ ดึง Token จาก localStorage
       const token = localStorage.getItem("token");
-
       const response = await axios.post(
         `${backendUrl}/activity/new`,
         data,
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`, // ✅ เพิ่ม Token ใน Header
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -143,15 +152,7 @@ const StepProgress = () => {
       console.log("✅ Success:", response.data);
       alert("News posted successfully!");
 
-      const newsId = response.data.activityId || null;
-      if (newsId) {
-        await sendLineBroadcast(newsId);
-      }
-
-      setNewsList([...newsList, response.data]);
-
       setFormData(initialFormState);
-
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -163,21 +164,20 @@ const StepProgress = () => {
     }
   };
 
+
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-md">
       <div className="flex flex-col sm:flex-row sm:space-x-4 border-b mb-6">
         <button
-          className={`px-4 py-2 font-bold w-full sm:w-auto text-center ${
-            activeTab === "Post" ? "border-b-2 border-orange-600 text-orange-600" : "text-gray-500"
-          }`}
+          className={`px-4 py-2 font-bold w-full sm:w-auto text-center ${activeTab === "Post" ? "border-b-2 border-orange-600 text-orange-600" : "text-gray-500"
+            }`}
           onClick={() => setActiveTab("Post")}
         >
           Post News
         </button>
         <button
-          className={`px-4 py-2 font-bold w-full sm:w-auto text-center ${
-            activeTab === "Edit/Delete" ? "border-b-2 border-orange-600 text-orange-600" : "text-gray-500"
-          }`}
+          className={`px-4 py-2 font-bold w-full sm:w-auto text-center ${activeTab === "Edit/Delete" ? "border-b-2 border-orange-600 text-orange-600" : "text-gray-500"
+            }`}
           onClick={() => setActiveTab("Edit/Delete")}
         >
           Edit/Delete News

@@ -21,7 +21,7 @@ export default function Example() {
       method: "GET", // ✅ ใช้ GET และเอา body ออก
     })
       .then(response => response.json())
-      .then(data => console.log("Tracking response:", data))
+      .then(data => console.log("Tracking data:", data))
       .catch(err => console.error("Tracking error:", err));
   }, []);
 2

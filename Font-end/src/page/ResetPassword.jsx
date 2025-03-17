@@ -17,11 +17,10 @@ const ResetPassword = () => {
             setError("Invalid or expired token.");
             setTimeout(() => navigate("/Foradmin"), 3000);
         }
-        console.log("Token received from URL:", reset_token);
     }, [reset_token, navigate]);
 
     const handleSubmit = async (e) => {
-        console.log("Sending request with token:", reset_token);
+        
         e.preventDefault();
         setMessage("");
         setError("");
