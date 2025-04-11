@@ -15,7 +15,8 @@ export default function Example() {
   const fname = localStorage.getItem("fname");
   const lname = localStorage.getItem("lname");
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
+  const token = localStorage.getItem("token");
+  console.log("Token Home page:", token);
   useEffect(() => {
     fetch(`${backendUrl}/home/track`, {
       method: "GET", // ✅ ใช้ GET และเอา body ออก

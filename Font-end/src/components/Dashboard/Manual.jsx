@@ -22,7 +22,7 @@ const Manual = () => {
     },
     manageEbooks: {
       title: 'Manage Ebooks',
-      images: Array.from({ length: 3 }, (_, i) => `/assets/Manual/ebook/${i + 1-1}.jpg`),
+      images: Array.from({ length: 8 }, (_, i) => `/assets/Manual/ebook/${i + 1-1}.jpg`),
     },
     lineBroadcast: {
       title: 'Line Broadcast',

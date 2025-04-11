@@ -75,7 +75,7 @@ const StepProgress = () => {
 
       // ✅ ดึง Token จาก localStorage
       const token = localStorage.getItem("token");
-
+      
       const newsUrl = `${backendUrl}/activity/${newsId}`;
       const response = await axios.post(
         `${backendUrl}/broadcast/send`,
@@ -98,7 +98,7 @@ const StepProgress = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
+    con
     const cleanData = {
       topic: formData.topic || "",
       detail: formData.detail || "",
